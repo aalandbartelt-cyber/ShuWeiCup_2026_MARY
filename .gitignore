@@ -1,0 +1,35 @@
+# data / raw references
+data/
+01_参考学习/**
+!01_参考学习/README.md
+*.zip
+*.rar
+*.7z
+*.tar.gz
+*.gz
+*.npz
+*.npy
+*.pt
+*.pth
+*.onnx
+
+# archives / envs / caches
+_archive/
+.worktrees/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.Rlibrary/
+.Rhistory
+.DS_Store
+*.tmp
+
+# delivery binaries (keep small text)
+06_交付/*.zip
+06_交付/*.rar
+06_交付/04_支撑材料/**
+05_论文/**/图片/*.zip
+
+# office temp
+~$*
