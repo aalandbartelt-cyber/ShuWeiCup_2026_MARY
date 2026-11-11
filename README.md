@@ -20,8 +20,9 @@ Skill：`C:\Users\mary3\.agents\skills\mary-modeling-contest-pipeline-shuwei`（
 1. `00_赛题与规则/赛事参数.md`
 2. `02_口径与约定/Git规范.md`
 3. `docs/collab/README.md`
-4. `05_论文/正式/` 只由 Codex 写
-5. Skill 的 `SKILL.md` 与 `references/09_十轮精读计划.md`
+4. `00_赛题与规则/2026官方更新_20261111/`（新格式/提交规范、Summary 模板、LaTeX 模板）
+5. `05_论文/正式/` 只由 Codex 写
+6. Skill 的 `SKILL.md` 与 `references/09_十轮精读计划.md`
 
 ## 快速命令
 
