@@ -6,7 +6,8 @@
 
 | 角色 | 位置 | 职责 |
 |---|---|---|
-| Codex | WSL / VS Code Remote-WSL | 主环境：建模、代码、结果、正式论文/包、`main` |
+| Codex | WSL / VS Code Remote-WSL | 默认主环境：建模、代码、结果、正式论文/包、`main` |
+| Cursor | WSL | **Codex 无额度/不可用时的备份主力**：接手建模/代码/结果/图表/论文候选；写 `cursor/` 分支与 `05_论文/待审/`；不能恢复 Codex thread，用 `CURSOR_HANDOFF.md` |
 | ZCode | Windows | 副环境：数据、文档、复核、图稿候选、提交检查 |
 | dsh | Windows | 只做论文评审/文字优化，写 `reviews/` |
 
@@ -15,6 +16,7 @@
 | 文件 | 写入者 | 规则 |
 |---|---|---|
 | `board.md` | 双方维护区 | 任务/状态/阻塞/活动日志 |
+| `CURSOR_HANDOFF.md` | Codex/Cursor 更新 | Cursor 接手/交回的唯一上下文；不依赖 Codex thread |
 | `to_codex.md` | 只有 ZCode | Codex 只改状态行 |
 | `to_zcode.md` | 只有 Codex | ZCode 只改状态行 |
 | `decisions.md` | 双方追加 | D-xxx，不删除 |
@@ -35,7 +37,9 @@
 
 ## 边界
 
-- 正式论文/图/包只由 Codex 写；ZCode 只写 `05_论文/待审/`、`docs/audit/`。
+- 正式论文/图/包默认只由 Codex 写；ZCode 只写 `05_论文/待审/`、`docs/audit/`。
+- Cursor 默认只写 `05_论文/待审/` 与 `cursor/` 分支；Codex 无额度/不可用时作为备份主力接手核心工作，正式件需用户明确授权并记录 `decisions.md`。
+- Cursor 是 AI 工具，生成内容按 skill `references/18` 记录/声明/报告。
 - dsh 不碰代码/结果/正式稿。
 - 候选转正式必须过 skill `references/common/13` 的五条件。
 - 大文件/参考 PDF 放 D 盘，不入库；消息只写路径。

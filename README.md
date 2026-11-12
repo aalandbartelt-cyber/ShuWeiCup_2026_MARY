@@ -7,7 +7,8 @@ Skill：`C:\Users\mary3\.agents\skills\mary-modeling-contest-pipeline-shuwei`（
 
 | 角色 | 位置 | 职责 | 不做什么 |
 |---|---|---|---|
-| **Codex** | WSL，VS Code Remote-WSL | 主环境：建模/代码/结果/正式论文/正式包；`main` 集成 | 不把正式路径交给辅助角色 |
+| **Codex** | WSL，VS Code Remote-WSL | 默认主环境：建模/代码/结果/正式论文/正式包；`main` 集成 | 不把正式路径交给辅助角色 |
+| **Cursor** | WSL | **Codex 无额度/不可用时的备份主力**：接手建模/代码/结果/图表/论文候选；写 `cursor/` 分支与 `05_论文/待审/`；不能恢复 Codex thread，用 `CURSOR_HANDOFF.md` | 默认不改 `05_论文/正式`、`06_交付`；正式件需用户明确授权 |
 | **ZCode** | Windows | 副环境：数据、文档、复核、图稿候选、提交检查 | 不直接改 `05_论文/正式`、`06_交付` |
 | **dsh** | Windows | 论文评审/文字优化，只写 `docs/collab/reviews/` | 不改代码/结果/正式稿 |
 
@@ -17,12 +18,13 @@ Skill：`C:\Users\mary3\.agents\skills\mary-modeling-contest-pipeline-shuwei`（
 
 ## 先读
 
-1. `00_赛题与规则/赛事参数.md`
-2. `02_口径与约定/Git规范.md`
-3. `docs/collab/README.md`
-4. `00_赛题与规则/2026官方更新_20261111/`（新格式/提交规范、Summary 模板、LaTeX 模板）
-5. `05_论文/正式/` 只由 Codex 写
-6. Skill 的 `SKILL.md` 与 `references/09_十轮精读计划.md`
+1. `AGENTS.md`（Codex/Cursor 分工与边界）
+2. `00_赛题与规则/赛事参数.md`
+3. `02_口径与约定/Git规范.md`
+4. `docs/collab/README.md` 与 `docs/collab/CURSOR_HANDOFF.md`
+5. `00_赛题与规则/2026官方更新_20261111/`（新格式/提交规范、Summary 模板、LaTeX 模板）
+6. `05_论文/正式/` 默认只由 Codex 写
+7. Skill 的 `SKILL.md` 与 `references/09_十轮精读计划.md`
 
 ## 快速命令
 

@@ -1,0 +1,35 @@
+---
+description: ShuWei Cup skill and Codex/Cursor handoff rules
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# ShuWei Cup project rule
+
+Before making changes:
+
+1. Confirm the terminal is WSL: `uname -a` shows Linux and `pwd` is `/home/mary/shuwei2026`.
+2. Read `AGENTS.md`.
+3. Read `docs/collab/CURSOR_HANDOFF.md` and run `git status --short --branch`.
+4. Read the ShuWei skill:
+   `/home/mary/.codex/skills/mary-modeling-contest-pipeline-shuwei/SKILL.md`
+   Then read the task-relevant files under `references/` (at least 01, 02, 05, 15, 18, 19, 20, 21 when applicable).
+
+Role:
+
+- Codex is the default primary agent.
+- Cursor is the backup primary agent when Codex has no quota or is unavailable.
+- Work on a `cursor/<scope>-<topic>` branch; never edit `main` directly.
+- Formal `05_论文/正式/` and `06_交付/` are written by Codex by default. Cursor may write `05_论文/待审/` and candidate artifacts. Writing formal artifacts requires explicit user authorization recorded in `docs/collab/decisions.md`.
+- Cursor cannot resume a Codex thread. Continue from the handoff file, not by inventing missing context.
+
+AI compliance:
+
+- Cursor is an AI tool. Any AI-assisted text/code/formula/figure/result must follow the skill's `references/18_AI工具合规与使用报告.md`: declaration, tool reference entry, in-text/code/figure marks, and AI Tool Usage Report.
+- Do not copy AI output without team verification.
+
+Before finishing:
+
+- Run the relevant tests/audits.
+- Update `docs/collab/CURSOR_HANDOFF.md` with what changed, commands/results, next steps, blockers.
+- Do not overwrite another agent's uncommitted work.

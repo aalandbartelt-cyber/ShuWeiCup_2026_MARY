@@ -10,6 +10,7 @@
 |---|---|---|---|
 | `main` | Codex | 可运行集成线；正式论文/包 | 只接受 Codex 合并 |
 | `codex/<scope>-<topic>` | Codex | 实验、Q1—Q4、图、论文、包 | 测试通过后 `--no-ff` 合 main |
+| `cursor/<scope>-<topic>` | Cursor | Codex 无额度/不可用时的备份主力：实验、代码、图、论文候选 | 默认只写 `05_论文/待审`；由 Codex 审后合并；正式件需用户授权 |
 | `zcode/<scope>-<topic>` | ZCode | 数据/文档/复核/图稿候选 | 只改 `05_论文/待审`、`docs/audit`；由 Codex 审后合并 |
 | `dsh/review-<date>` | dsh | 评审报告 | 只改 `docs/collab/reviews/`；不合并代码 |
 
