@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShuWei // AI Ops</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"><span></span><span></span><span></span></div>
+      <div>
+        <div class="eyebrow">SHUWEI CUP 2026</div>
+        <h1>AI <span>OPS</span> / HANDOFF CONSOLE</h1>
+      </div>
+    </div>
+    <div class="top-meta">
+      <div class="live"><span class="live-dot"></span><span id="clock">--:--:--</span><span class="muted">LOCAL</span></div>
+      <div class="chip" id="phase">PHASE --</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel flow-panel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">CONTROL PLANE</div>
+          <h2>Handoff topology</h2>
+        </div>
+        <div class="panel-sub">observability only · file + git are source of truth</div>
+      </div>
+      <div class="flow" id="flow">
+        <div class="relay">
+          <div class="flow-node codex" data-agent="codex">
+            <div class="node-top"><span class="node-dot"></span><span class="node-role">PRIMARY</span></div>
+            <div class="node-name">Codex</div>
+            <div class="node-runtime">WSL</div>
+            <div class="node-bar"><i></i></div>
+          </div>
+          <div class="arrow"><span class="arrow-line"></span><span class="arrow-label">quota red / handoff</span></div>
+          <div class="handoff-core">
+            <div class="core-icon">⇄</div>
+            <div class="core-title">HANDOFF</div>
+            <div class="core-sub">CURSOR_HANDOFF.md</div>
+          </div>
+          <div class="arrow"><span class="arrow-line"></span><span class="arrow-label">claim + continue</span></div>
+          <div class="flow-node cursor" data-agent="cursor">
+            <div class="node-top"><span class="node-dot"></span><span class="node-role">BACKUP PRIMARY</span></div>
+            <div class="node-name">Cursor</div>
+            <div class="node-runtime">WSL</div>
+            <div class="node-bar"><i></i></div>
+          </div>
+        </div>
+        <div class="branch-row">
+          <div class="branch-line"></div>
+          <div class="branch-node" data-agent="zcode"><span class="branch-kicker">DATA / REVIEW</span><b>ZCode</b><em>Windows</em></div>
+          <div class="branch-node" data-agent="dsh"><span class="branch-kicker">PAPER REVIEW</span><b>dsh</b><em>Windows</em></div>
+        </div>
+      </div>
+      <div class="flow-caption">
+        <span class="tag">RULE 01</span> Cursor cannot resume a Codex thread; it reads the handoff.
+        <span class="tag">RULE 02</span> Formal paper/package remains Codex-owned unless explicitly authorized.
+      </div>
+    </section>
+
+    <div class="content-grid">
+      <section class="panel agents-panel">
+        <div class="panel-head">
+          <div><div class="eyebrow">AGENT ROSTER</div><h2>Who is doing what</h2></div>
+          <div class="panel-sub" id="owner-label">OWNER: --</div>
+        </div>
+        <div class="agent-grid" id="agents"></div>
+      </section>
+
+      <aside class="panel handoff-panel">
+        <div class="panel-head">
+          <div><div class="eyebrow">HANDOFF LEDGER</div><h2>Next / blocked</h2></div>
+          <div class="panel-sub" id="handoff-age">--</div>
+        </div>
+        <div class="owner-strip">
+          <span class="owner-dot"></span>
+          <div><div class="owner-kicker">CURRENT OWNER</div><div class="owner-name" id="owner-name">--</div></div>
+          <button class="copy-btn" id="copy-prompt">COPY CURSOR PROMPT</button>
+        </div>
+        <div class="ledger-block">
+          <div class="ledger-title">NEXT 3</div>
+          <ol class="task-list" id="tasks"><li class="empty">No handoff loaded.</li></ol>
+        </div>
+        <div class="ledger-block">
+          <div class="ledger-title">BLOCKERS</div>
+          <ul class="blocker-list" id="blockers"><li class="empty">None recorded.</li></ul>
+        </div>
+        <div class="ledger-block">
+          <div class="ledger-title">FORMAL OWNERSHIP</div>
+          <ul class="ownership-list" id="ownership"><li class="empty">Not recorded.</li></ul>
+        </div>
+      </aside>
+    </div>
+
+    <section class="panel health-panel">
+      <div class="panel-head">
+        <div><div class="eyebrow">SYSTEM HEALTH</div><h2>Repo / skill / sessions</h2></div>
+        <div class="panel-sub" id="generated">--</div>
+      </div>
+      <div class="health-grid">
+        <div class="metric"><span>BRANCH</span><b id="branch">--</b></div>
+        <div class="metric"><span>WORKTREE</span><b id="dirty">--</b></div>
+        <div class="metric"><span>SKILL FILES</span><b id="skill-files">--</b></div>
+        <div class="metric"><span>SKILL UPDATED</span><b id="skill-updated">--</b></div>
+        <div class="metric"><span>CODEX SESSIONS TODAY</span><b id="sessions">--</b></div>
+        <div class="metric"><span>LAST COMMIT</span><b id="last-commit">--</b></div>
+      </div>
+      <div class="recent" id="recent"></div>
+      <div class="notes" id="notes"></div>
+    </section>
+  </main>
+
+  <footer>
+    <span>LOCAL ONLY · 127.0.0.1 · read-only</span>
+    <span>source: CURSOR_HANDOFF.md + git + skill</span>
+    <span id="refresh">refresh 10s</span>
+  </footer>
+  <div class="toast" id="toast">Copied</div>
+  <script src="/app.js"></script>
+</body>
+</html>

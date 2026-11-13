@@ -35,6 +35,18 @@ python scripts/env_doctor.py
 python scripts/audit_git_hygiene.py --root .
 ```
 
+## AI Ops HUD（可选）
+
+本地只读面板，显示 Codex/Cursor/ZCode/dsh 的 owner、handoff 下一步、阻塞、分支与 skill 版本：
+
+```bash
+cd ~/shuwei2026
+python3 tools/agent_hud/server.py
+# http://127.0.0.1:8765/
+```
+
+它参考 `agent-hud-open` 的状态卡/额度色思路，但不读密钥、不调用外部 API、不替代 `CURSOR_HANDOFF.md`；额度色在 `tools/agent_hud/ai_flow.json` 手动维护。
+
 ## 提交
 
 ```bash

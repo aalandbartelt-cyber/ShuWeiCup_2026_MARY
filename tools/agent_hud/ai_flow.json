@@ -1,0 +1,78 @@
+{
+  "updated": "2026-11-13",
+  "owner": "codex",
+  "phase": "pre-contest",
+  "agents": [
+    {
+      "id": "codex",
+      "name": "Codex",
+      "runtime": "WSL / VS Code Remote",
+      "role": "Primary",
+      "status": "standby",
+      "quota": "unknown",
+      "task": "默认主环境：建模、代码、结果、正式论文/包、main 集成",
+      "accent": "#38bdf8"
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "runtime": "WSL",
+      "role": "Backup primary",
+      "status": "standby",
+      "quota": "unknown",
+      "task": "Codex 无额度时接手：cursor/ 分支 + 05_论文/待审/",
+      "accent": "#a78bfa"
+    },
+    {
+      "id": "zcode",
+      "name": "ZCode",
+      "runtime": "Windows",
+      "role": "Support",
+      "status": "standby",
+      "quota": "n/a",
+      "task": "数据、文档、复核、图稿候选、提交检查",
+      "accent": "#34d399"
+    },
+    {
+      "id": "dsh",
+      "name": "DeepSeek Harness",
+      "runtime": "Windows",
+      "role": "Review",
+      "status": "standby",
+      "quota": "n/a",
+      "task": "论文评审/文字优化，只写 docs/collab/reviews/",
+      "accent": "#fbbf24"
+    }
+  ],
+  "flows": [
+    {
+      "from": "codex",
+      "to": "cursor",
+      "label": "quota red / handoff",
+      "state": "standby"
+    },
+    {
+      "from": "cursor",
+      "to": "codex",
+      "label": "return + commit",
+      "state": "standby"
+    },
+    {
+      "from": "codex",
+      "to": "zcode",
+      "label": "data / review",
+      "state": "standby"
+    },
+    {
+      "from": "codex",
+      "to": "dsh",
+      "label": "paper review",
+      "state": "standby"
+    }
+  ],
+  "notes": [
+    "HUD is observability only; CURSOR_HANDOFF.md + git are the source of truth.",
+    "Cursor cannot resume Codex threads; it reads the handoff.",
+    "Formal paper/package remains Codex-owned unless the user explicitly authorizes Cursor."
+  ]
+}

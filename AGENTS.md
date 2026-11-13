@@ -42,4 +42,5 @@ Cursor 不会自动加载 Codex skill；必须显式读上述路径。项目规�
 
 - 跨 Agent 交接只写文件，不依赖对话上下文。
 - 每次接手/交付更新 `docs/collab/CURSOR_HANDOFF.md`（或对应 handoff）。
+- 可选本地只读面板：`tools/agent_hud/server.py` → `http://127.0.0.1:8765/`；它只做 observability，不替代 handoff。
 - 冲突时保留双方内容，重新编号/重跑测试，不覆盖对方未合并工作。
