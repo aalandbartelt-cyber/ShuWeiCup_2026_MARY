@@ -21,3 +21,7 @@
 WSL 访问路径：
 
 `/mnt/d/上海大学__/2026第十二届数维杯/`
+
+## 本地参考克隆（不入库）
+
+`01_参考学习/RoboCupHomeSim` 是私有仓库 `shuyangh/RoboCupHomeSim` 的 `main` 克隆，供 C 题决策结构参考。2026-11-20 拉取的提交是 `9a5539e`。使用 `candidates/stage2/RockyV6.1`。不要使用 D 盘旧的 `maryv1` 检出。该目录匹配 `01_参考学习/**`，不要加入 git，也不要把它的代码、分数或场景放进论文和支撑材料。说明见 `docs/collab/C题选题交接_20261120.md`。
