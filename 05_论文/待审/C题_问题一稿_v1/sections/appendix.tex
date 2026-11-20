@@ -1,0 +1,155 @@
+\appendix
+\titleformat{\section}{\large\bfseries}{Appendix \thesection}{.65em}{}
+\renewcommand{\thefigure}{\thesection.\arabic{figure}}
+\renewcommand{\thetable}{\thesection.\arabic{table}}
+\setcounter{table}{0}
+\section{Supporting Materials}
+The accompanying source archive contains the programs listed in Table~\ref{tab:files}, together with the manuscript sources and figure files. Its README gives dependencies, input locations, and run instructions; raw competition data and external model weights are not included.
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Supporting source files}
+\label{tab:files}
+\begin{tabularx}{.92\linewidth}{llX}
+\toprule
+Directory or file & Format & Contents\\
+\midrule
+\path{src/shuwei_c/} & Python & Models, data access, and sequential interface\\
+\path{scripts/} & Python & Experiments, figures, tables, and verification\\
+\path{configs/} & JSON & Model and plotting settings\\
+\path{tests/} & Python & Numerical and interface checks\\
+\path{requirements-c*.txt} & Text & Numerical and video dependencies\\
+\bottomrule
+\end{tabularx}
+\end{table}
+\FloatBarrier
+
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\section{Supplementary Tables and Figures}
+\label{sec:appendix}
+Table~\ref{tab:coef} reports the four-scale coefficients at 0.1 s and descriptive 95\% environment-bootstrap intervals, with the penalty and training scale held fixed. These coefficients are predictive weights rather than physical motion constants.
+\input{tables/baseline_uncertainty.tex}
+
+\subsection*{Retention, timing, and coordinate evidence}
+\label{sec:retention}
+\tabref{tab:retention_counts} gives separate counts of records, maximal hand-specific runs, and hand samples. For qualified targets and excluded origins, runs refer to consecutive eligible origin indices, split at temporal gaps; low-quality runs refer to the original flagged observations. One record can contribute to several purposes, and fitting and OOF assessment reuse training data in separate folds. The counts therefore must not be summed as four disjoint record classes. Test entries report retention only, not a new performance evaluation.
+\input{tables/retention_counts.tex}
+
+\tabref{tab:sampling} summarizes every inter-sample interval in milliseconds. EgoDemo has within-record median steps 33.330--40.000 ms, EgoPro 33.319--33.722 ms, and EgoStandard 33.333--40.000 ms. Overall steps range from 33.318 to 40.001 ms; none exceeds 1.5 times its record median. This verifies recorded continuity, not that a device never omitted an unrecorded frame. No flagged coordinate is used as independent position truth.
+\input{tables/sampling.tex}
+
+UUID equality is checked between raw record metadata and the official split file before loading. Exact duplicate checks hash timestamps and landmark arrays. All environment and scene identifiers are split-disjoint. Three operator identifiers recur between training and test; none links validation to another split. The received tree omits the referenced coordinate documentation. The field naming establishes an intended world-frame interpretation for EgoDemo, but neither physical scaling nor named axis directions are verified across all datasets. Rotation/translation consistency and projection diagnostics cannot replace that missing calibration evidence.
+\FloatBarrier
+
+\figref{fig:A1} compares validation error at 0.1 s (A) and across five forecast horizons (B). Each horizon uses its corresponding fitted model; the enlargement retains the original values and scales.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/appendix_A1.pdf}
+\caption{Prediction across forecast horizons}
+\label{fig:A1}
+\end{figure}
+\FloatBarrier
+
+\figref{fig:A2} compares numerical baselines on common validation targets: native-unit error at 0.1 s (A) and scale-normalized error across horizons (B). Filter parameters were selected on validation.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/appendix_A2.pdf}
+\caption{Numerical baseline comparison}
+\label{fig:A2}
+\end{figure}
+\FloatBarrier
+
+\figref{fig:A3} shows validation coverage (A) and the 90\% coverage--radius tradeoff (B). Conditional quantiles and dataset pooling are used here without the final delayed-feedback rule or flagged-state floor; point predictors also differ, so this is a pipeline comparison.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/appendix_A3.pdf}
+\caption{Development calibration comparison}
+\label{fig:A3}
+\end{figure}
+\FloatBarrier
+
+\figref{fig:A4} reports relative endpoint Brier reduction against the transition prior in training-environment OOF (A) and validation (B). Positive values improve the score; the mixture improves validation but worsens OOF.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/appendix_A4.pdf}
+\caption{Endpoint-video ablation}
+\label{fig:A4}
+\end{figure}
+\FloatBarrier
+
+\figref{fig:A5} compares any-hand endpoint Brier scores (A) and AUC among currently-good origins (B). These scores concern supplied observation flags and differ from event recall for new onsets.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/appendix_A5.pdf}
+\caption{Endpoint probability comparisons}
+\label{fig:A5}
+\end{figure}
+\FloatBarrier
+
+\figref{fig:A6} gives within-record associations with flagged fraction (A) and log-speed (B). Points and intervals are coefficients and 95\% intervals from 2,000 environment resamples; stage labels are retrospective and the associations are not causal.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/appendix_A6.pdf}
+\caption{Task and stage associations}
+\label{fig:A6}
+\end{figure}
+\FloatBarrier
+
+\figref{fig:A7} shows median projection-consistency examples from three validation datasets (A--C) and the largest eligible disagreement (D). Green crosses are projected supplied centers; orange circles are detected 2D centers. All cases require two detected, unflagged hands; they do not establish unconditional tracking accuracy.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/appendix_A7.pdf}
+\caption{Projection-consistency examples}
+\label{fig:A7}
+\end{figure}
+\FloatBarrier
+
+
+\figref{fig:A8} supplements the data audit: record duration and flagged fraction (A), flags across 40 relative-time bins with a square-root color scale (B), the 21-landmark range and hand center (C), and target-time matching on common origins (D). All four panels use training/validation data; the band in C represents geometric spread.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/appendix_B8.pdf}
+\caption{Data-quality and timing diagnostics}
+\label{fig:A8}
+\end{figure}
+\FloatBarrier
+
+\figref{fig:A9} reports validation error over five horizons (A), existing training-OOF-calibrated motion-scaled radii over four horizons (B), their actual coverage (C), and adaptive error reduction within each dataset (D). The single green point in B/C is the conditional-feedback model at 0.1 s. The curves use the full observed history at each origin and do not calibrate missing-observation trajectories. Negative cells in D identify model degradation.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/appendix_B9.pdf}
+\caption{Error and uncertainty across horizons}
+\label{fig:A9}
+\end{figure}
+\FloatBarrier
+
+\figref{fig:A10} shows validation center error (A) and record-balanced flagged-hand fraction (B). E1--E4 identify restaurant 0004, courier station 0022, supermarket 0074, and supermarket 0147, containing 1, 3, 2, and 1 recordings. Full identifiers remain in the source table. These descriptive differences are not causal environment effects.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/appendix_B10.pdf}
+\caption{Validation environment differences}
+\label{fig:A10}
+\end{figure}
+
+\tabref{tab:semantic_desc} summarizes all keyword action groups in the 62 development recordings. Counts refer to annotated thirds; labels may overlap. Flagged fractions count timestamps with either hand flagged and weight phases by timestamp count; log-speed means weight qualified samples. The reach group has no support and is displayed as missing rather than zero. These are unadjusted descriptives, distinct from the within-record regression in \eqref{eq:context}.
+\input{tables/semantic_descriptives.tex}
+\FloatBarrier
+
+\figref{fig:A11} shows the validation EgoStandard target with the largest adaptive-minus-four-scale error at 0.5 s (A) and 1 s (B), together with neighboring forecasts. A has a flagged origin; B has an unflagged origin with recent flagged history. Later references are qualified; curves break across omitted flagged targets. Curves use the coordinate with the largest displayed range, subtracting the panel's first reference coordinate. Time zero marks the failed target; each forecast uses its own earlier origin. The source table records selection and quality state. These selected failures do not estimate their frequency.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/appendix_B11.pdf}
+\caption{Long-horizon prediction failures}
+\label{fig:A11}
+\end{figure}
+\FloatBarrier
+
+\subsection*{Previously observed test recheck}
+\label{sec:test_recheck}
+\tabref{tab:test_supplement} retains the recorded test recheck. Errors are multiplied by 1000; radii retain native units. The numerical model was frozen at 09:32:12 UTC and rechecked at 09:32:40, after the baseline test had been seen. Hash-linked manifests preserve that history; this is not an untouched test set.
+\input{tables/test_supplement.tex}
+
+The video recheck has AP 0.064 versus 0.113, with 21/27 versus 24/27 detected events and 12.09\% versus 9.61\% false alarms at the training 5\% threshold. These small counts support limited supplementary inference. Validation recall intervals use 10,000 whole-environment resamples (seed 20261120); 39 event-free resamples yield undefined ratios and are excluded. Events within an environment are not assumed independent.
+

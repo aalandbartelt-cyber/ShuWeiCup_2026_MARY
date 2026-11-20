@@ -44,3 +44,7 @@ docs/analysis/shuwei/round2_visual/
 
 # official problem releases / C dataset (large, local-only)
 00_赛题与规则/正式发布/
+
+# C experiments: local predictions, source audits, frames, models and cloud payloads
+artifacts/
+.pytest_cache/

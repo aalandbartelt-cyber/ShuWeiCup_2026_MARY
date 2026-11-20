@@ -1,0 +1,49 @@
+{
+  "date": "2026-11-20",
+  "style": "Sequential numeric citations; consistent author/title/venue/year fields; arXiv entries explicitly labeled preprints.",
+  "records": [
+    {
+      "key": "adamw",
+      "source": "ICLR / OpenReview",
+      "location": "https://openreview.net/forum?id=Bkg6RiCqY7",
+      "verification": "Optimizer; authors, title, venue and year"
+    },
+    {
+      "key": "quantiles",
+      "source": "Original Econometrica paper",
+      "location": "https://people.eecs.berkeley.edu/~jordan/sail/readings/koenker-bassett.pdf",
+      "verification": "Quantile loss; volume 46(1), pages 33–50, 1978"
+    },
+    {
+      "key": "lightgbm",
+      "source": "Official NeurIPS proceedings",
+      "location": "https://proceedings.neurips.cc/paper/2017/hash/6449f44a102fde848669bdd9eb6b76fa-Abstract.html",
+      "verification": "Gradient-boosted trees; title/authors/volume/year verified; pagination 3146–3154"
+    },
+    {
+      "key": "aci",
+      "source": "Official NeurIPS proceedings and BibTeX",
+      "location": "https://proceedings.neurips.cc/paper_files/paper/2021/hash/0d441de75945e5acbc865406fc9a2559-Abstract.html",
+      "verification": "Feedback motivation; 34:1660–1672; no claim that its theorem applies to our different rule"
+    },
+    {
+      "key": "mediapipe",
+      "source": "Author preprint",
+      "location": "https://arxiv.org/abs/2006.10214",
+      "verification": "Hand detector; arXiv identifier and metadata"
+    },
+    {
+      "key": "farneback",
+      "source": "Author university publication record",
+      "location": "https://www.ida.liu.se/ext/WITAS-ev/Computer_Vision_Technologies/PaperInfo/farneback03.html",
+      "verification": "Optical flow; SCIA 2003, LNCS 2749:363–370"
+    },
+    {
+      "key": "dinov2",
+      "source": "Author preprint",
+      "location": "https://arxiv.org/abs/2304.07193",
+      "verification": "Appearance-feature alternative; arXiv identifier and metadata"
+    }
+  ],
+  "removed_contest_statement": "Removed at user request; local official rules remain audit evidence, not a bibliography entry."
+}

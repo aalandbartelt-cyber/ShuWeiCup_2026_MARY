@@ -1,0 +1,35 @@
+{
+  "version": "team-protocol-20261120-v1",
+  "status": "user-approved team choices; not an official Q2 protocol",
+  "state": "left/right 21-point centroids and velocities; relative vector derived",
+  "weighting": "equal environment; equal episodes within environment",
+  "q2": {
+    "main_windows_s": [0.2, 0.5, 1.0],
+    "stress_windows_s": [2.0],
+    "request_caps": [0, 1, 2, 4],
+    "cost_per_request": 1.0,
+    "main_delay_s": 0.1,
+    "sensitivity_delays_s": [0.0, 0.3],
+    "return": "sample at request time; usable only at response time",
+    "protocols": ["all_modalities_hidden", "numeric_missing_video_available"],
+    "window_stride_s": 2.5,
+    "warmup_s": 1.0,
+    "coverage": 0.9
+  },
+  "q3": {
+    "objective": "mean weighted on-time rate; equal weight per case",
+    "tie_break": ["weighted_completion_rate", "lower_total_cost"],
+    "mappings": [[1.0, 0.5], [0.75, 0.5], [1.5, 0.5], [1.0, 0.0], [1.0, 1.0]],
+    "reservation_candidates": ["minimum", "duration_q50", "duration_q80"],
+    "information_gain": "parametric expected downstream decision benefit, with review delay and budget opportunity cost",
+    "test_status": "organizer final seeds unavailable; validation only"
+  },
+  "video": {
+    "views": "all available head and wrist views",
+    "candidate_models": ["MediaPipe Hand Landmarker", "HaMeR"],
+    "allow_finetuning": true,
+    "q3_pixels_allowed": false,
+    "human_2d_verification": "pending; not independent 3D truth"
+  },
+  "seed": 20261120
+}

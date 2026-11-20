@@ -1,0 +1,179 @@
+\section{Problem 1: Operational States and Reliability}
+\subsection{Data characteristics and preprocessing}
+The official split contains 55 training, 7 validation, and 7 test recordings. We use the 62 training/validation recordings to examine data quality: 53,829 two-hand timestamps, 107,658 hand observations, and 6,782,454 coordinate values. These coordinates are not independent samples.
+
+Development recordings last 5.93--173.97 s; their flags mark 750 hand observations (0.697\%). Across all 69 records, raw metadata contain 69 distinct \texttt{episode\_uuid} values matching the split file exactly. There are no duplicate trajectories or nonfinite hand samples. Environments and scene identifiers are disjoint across splits. Operator identifiers overlap only between training and test (3 identifiers); validation shares none. Thus the test recheck is not operator-independent.
+
+Hand timestamps are strictly increasing and exactly match the quality and head timestamps. We define a gap as $\Delta t>1.5\widetilde{\Delta t}$ within a record; none occurs. EgoDemo and EgoStandard contain approximately 25--30 Hz records; EgoPro spans 29.65--30.01 Hz. No dropped-sample gap, interpolation, or unit conversion is introduced. Sampling intervals appear in Appendix Table~\ref{tab:sampling}. \figref{fig:data}A shows the official split; the remaining data-characteristic plots use development records (\appfig{fig:A8}A--C).
+
+\figref{fig:data}B traces sample selection for the 0.1 s forecasts. Warmup and endpoint rules exclude 1,486 and 406 hand origins, leaving 105,766 prediction--reference pairs: 105,057 unflagged targets for numerical evaluation and 709 flagged targets retained for quality analysis. No entire recording is discarded.
+
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/main_01.pdf}
+\caption{Data sources and sample allocation}
+\label{fig:data}
+\end{figure}
+
+To compare forecasts at the same elapsed time, we match origin $t_i$ and horizon $h$ to the nearest admissible reference:
+\begin{equation}
+j(i,h)=\argmin_{j>i}|t_j-(t_i+h)|,\qquad
+|t_{j(i,h)}-(t_i+h)|\leq0.55\,\widetilde{\Delta t},
+\label{eq:alignment}
+\end{equation}
+\noindent where $\widetilde{\Delta t}$ is the median sampling interval. Each origin requires 0.4 s of past observations; targets beyond the recording are excluded. Predictions use the matched elapsed interval, but never the future reference value. On common origins, this rule reduces timing error from 15.493 to 0.709 ms in EgoDemo and from 9.543 to 0.085 ms in EgoPro (\appfig{fig:A8}D).
+
+\tabref{tab:uses} separates data purposes. Complete fields mean finite timestamps and 21 three-dimensional landmarks for each hand, with an aligned quality flag. A qualified reference additionally has no supplied bad flag. A record may support several purposes: only eligible training targets fit the motion model; held-out qualified targets assess error; flagged observations train/analyze reliability but never serve as position-error truth. Exclusion applies to a forecast origin, not its whole recording. Appendix Table~\ref{tab:retention_counts} counts records and contiguous hand-specific intervals separately.
+\begin{table}[!htbp]
+\centering\small
+\caption{Data-use rules at 0.1 s}
+\label{tab:uses}
+\begin{tabularx}{\linewidth}{lXrrr}
+\toprule
+Use & Required conditions & Train & Validation & Test\\
+\midrule
+Motion fitting & Complete fields; valid time match; qualified target & 91,870 & -- & --\\
+Error evaluation & Same target rule; held-out prediction & 91,870$^*$ & 13,187 & 24,022$^\dagger$\\
+Low-quality analysis & Finite observation with a supplied flag & 591 & 159 & 250\\
+Excluded origins & Less than 0.4 s history or target outside record & 1,668 & 224 & 210\\
+\bottomrule
+\end{tabularx}
+\par\vspace{4pt}
+\parbox{\linewidth}{\footnotesize Counts are eligible adaptive-model hand samples, not independent trials; baseline fitting additionally screens sampled history flags. $^*$Whole-environment OOF predictions; $^\dagger$previously observed test, supplementary only. Fitting and OOF reuse training records in separate folds. Flagged targets number 554/155/250 and are excluded from numerical scoring. No entire recording is removed.}
+\end{table}
+
+EgoDemo explicitly labels positions as world coordinates; the other datasets supply pose positions and camera transforms. However, the referenced coordinate documentation is absent from the received archive. The metadata unit ``m'' describes operator height and limb lengths, not these coordinates. We therefore retain native coordinate units and do not claim meters or verified world-axis directions. The three training hand scales are 0.03843, 0.03837, and 0.03935 native units. Their normalization conditions numerical learning; it does not establish a physical conversion. Rigid-coordinate consistency is proved below; physical tolerances require an independently established conversion.
+
+The video audit covers 166 development streams and 74,100 frames at nominal 15 Hz; 124 head-camera streams supply 54,038 frames. Features use the latest available frame. Projection uses supplied camera poses and principal points under the audited transform convention; lens distortion remains untreated (\appfig{fig:A7}).
+\FloatBarrier
+
+\subsection{Model formulation}
+\subsubsection{Causal hand state}
+We describe each hand by its center and recent velocity:
+\begin{equation}
+\begin{aligned}
+c_a(t)&=\frac{1}{21}\sum_{k=1}^{21}p_{a,k}(t),\qquad
+v_a(t_i)=\frac{c_a(t_i)-c_a(t_{\nu_i})}{t_i-t_{\nu_i}},\\
+s(t)&=(c_L,v_L,c_R,v_R)\in\R^{12}.
+\end{aligned}
+\label{eq:state}
+\end{equation}
+\noindent Here $p_{a,k}(t)\in\R^3$ is landmark $k$ of hand $a\in\{L,R\}$, $c_a$ is its geometric center, and $\nu_i<i$ selects the past sample nearest $t_i-1/30$ s. Velocity $v_a$ uses native units/s. The center summarizes common translation across the 21 landmarks without privileging one joint; it is not a product position.
+
+Let $\F_t$ contain all numerical observations, frames, flags, and returned reference errors available by $t$. Every forecast and update uses only $\F_t$. Semantic stages with unknown endpoints are excluded from online inputs.
+
+\subsubsection{Adaptive displacement prediction}
+Our simplest motion baseline extrapolates the current velocity:
+\begin{equation}
+\widehat c_a^{\,\mathrm{lin}}(t+h)=c_a(t)+h\,v_a(t).
+\label{eq:linear}
+\end{equation}
+
+We also compare last-value persistence, one fitted velocity multiplier, and a four-scale velocity combination. These baselines use identical qualified targets (\appfig{fig:A2}).
+
+Short histories react quickly but are sensitive to noise; longer histories smooth motion but can miss turns. We therefore combine ten displacement estimates: seven velocity estimates over $1/30$, $2/30$, $0.1$, $0.15$, $0.2$, $0.3$, and $0.4$ s, plus quadratic fits to the latest 5, 9, or 13 center samples. Their weights adapt to the current motion:
+\begin{align}
+\delta_{a,j}(t,h)&=\tfrac12\tanh f_{\theta,j}(x_a(t,h)), \label{eq:correction}\\
+\widehat c_a(t+h)&=c_a(t)+d_g\sum_{j=1}^{10}
+\bigl(\omega_{g,j}+\delta_{a,j}(t,h)\bigr)e_{a,j}(t,h).
+\label{eq:gate}
+\end{align}
+\noindent Here $d_g>0$ is a training-derived hand scale for dataset $g$; $e_{a,j}$ is estimate $j$ divided by $d_g$; $\omega_{g,j}$ is its fitted baseline weight; and $f_\theta$ maps features $x_a$ to bounded corrections. The weights may be negative and need not sum to one.
+
+Features describe displacement magnitudes, velocity angles, current/past flags, flag duration, hand shape, relative head/hand distances, hand side, dataset, and already-returned errors. Spatial features use norms, dot products, and centered-shape singular values, making the numerical forecast consistent under coordinate changes.
+
+\begin{proposition}[Coordinate consistency]
+\label{prop:equivariance}
+For a fixed trained model, transform all hand and head coordinates by $p'=Rp+\tau$, where $R^\top R=I$ and $\tau\in\R^3$ is a translation, leaving times and labels unchanged. Then $\widehat c'_a=R\widehat c_a+\tau$. Relative to the baseline $\widehat c_a^{\,0}=c_a+d_g\sum_j \omega_{g,j}e_{a,j}$, the correction satisfies
+\begin{equation}
+\norm{\widehat c_a-\widehat c_a^{\,0}}
+\leq \frac{d_g}{2}\sum_{j=1}^{10}\norm{e_{a,j}}.
+\label{eq:gatebound}
+\end{equation}
+\end{proposition}
+\begin{proof}
+Finite differences and quadratic displacement fits give $e'_{a,j}=Re_{a,j}$. Norms, dot products, singular values, and relative distances are unchanged, so $\delta'_{a,j}=\delta_{a,j}$. Substitution into \eqref{eq:gate} yields $\widehat c'_a=R\widehat c_a+\tau$. Finally, $|\delta_{a,j}|\leq1/2$ and the triangle inequality give \eqref{eq:gatebound}.
+\end{proof}
+
+The baseline weights use bounded, regularized distance minimization. The adaptive network minimizes
+\begin{equation}
+\mathcal L(\theta)=
+\sum_n w_n\sqrt{\norm{\widehat y_n-y_n}^2+10^{-8}}
++10^{-3}\operatorname{mean}_{n,j}\delta_{n,j}^{\,2},
+\label{eq:training}
+\end{equation}
+\noindent where $y_n$ and $\widehat y_n$ are normalized observed and predicted displacements. Nonnegative weights $w_n$ sum to one and balance environments, records, hands, and qualified observations. The first term measures prediction error; the second limits large corrections.
+
+The network has two 48-unit SiLU layers. AdamW~\cite{adamw} uses ten epochs, learning rate $10^{-3}$, weight decay $10^{-2}$, batch size 4096, and gradient clipping at 2. We average three seeds. Standardization is fitted within training folds; standardized inputs are clipped to $[-10,10]$.
+
+\subsubsection{Prediction balls and delayed feedback}
+A point forecast alone does not indicate reliability. We therefore attach a ball whose radius estimates a conditional error quantile:
+\begin{equation}
+B_{a,q}(t,h)=\{z\in\R^3:\norm{z-\widehat c_a(t+h)}\leq r_{a,q}(t,h)\},
+\label{eq:ball}
+\end{equation}
+\noindent where $r_{a,q}\geq0$ is the radius in native units and $q\in\{0.5,0.8,0.9,0.95\}$ is the nominal coverage. Calibration is fitted at $h=0.1$ s.
+
+For normalized error $E_a=\norm{c_a(t+h)-\widehat c_a(t+h)}/d_g$, we fit quantiles of $\log(1+E_a)$ with the pinball loss~\cite{quantiles}:
+\begin{equation}
+\rho_q(v)=v\bigl(q-\ind\{v<0\}\bigr),\qquad
+\widehat Q_q=\argmin_Q\sum_n w_n\rho_q\{\log(1+E_n)-Q(x_n)\}.
+\label{eq:pinball}
+\end{equation}
+\noindent Here $\ind$ is an indicator and $Q(x_n)$ predicts the log-error quantile. LightGBM~\cite{lightgbm} uses 180 trees, 15 leaves, learning rate 0.04, minimum leaf size 150, and L2 regularization 10. Inputs add past-error summaries with 0.3, 1, and 3 s decay times; only returned references enter them.
+
+Dataset-specific corrections are shrunk toward a global correction to limit unstable estimates from small groups:
+\begin{equation}
+\begin{aligned}
+\widetilde r_{a,q}&=\max\{\epsilon,\exp(\widehat Q_q)-1\},\qquad
+\lambda_g=\frac{m_g}{m_g+3},\\
+\bar r_{a,q}&=\max\{\epsilon,\widetilde r_{a,q}
++\lambda_g\kappa_{g,q}+(1-\lambda_g)\kappa_{0,q}\}.
+\end{aligned}
+\label{eq:pool}
+\end{equation}
+\noindent Here $m_g$ counts training environments; $\kappa_{g,q}$ and $\kappa_{0,q}$ are dataset and global residual quantiles; $\epsilon=10^{-5}$; and $\bar r_{a,q}$ is scale-normalized. Fits use training out-of-fold errors. Nested assessment excludes each outer environment from both prediction fitting and calibration.
+
+For currently flagged hands, training residuals supply a minimum radius. A cumulative maximum orders the coverage levels. To respond to recent errors, we initialize a log multiplier $\ell_{a,q}=0$ and update it when a qualified reference returns:
+\begin{equation}
+\ell_{a,q}\leftarrow
+\operatorname{clip}_{[-\log3,\log3]}
+\left[\ell_{a,q}+0.01\min(30\Delta t,3)
+\left(\ind\{E_a>r^{\mathrm{issued}}_{a,q}/d_g\}-(1-q)\right)\right].
+\label{eq:feedback}
+\end{equation}
+\noindent Here $\Delta t$ is the interval since the previous qualified return, initially $1/30$ s; $r^{\mathrm{issued}}_{a,q}$ is the radius stored at forecast time. Excess misses enlarge future radii; sufficiently many covered targets reduce them. The next radius is $d_g$ times the cumulative maximum of the floored $\bar r_{a,q}\exp(\ell_{a,q})$.
+
+\begin{proposition}[Nested prediction balls]
+\label{prop:nested}
+For preliminary radii $u_1,\ldots,u_J\geq0$ at increasing nominal levels, let $r_j=\max_{k\leq j}u_k$. This is the smallest nondecreasing vector that dominates the preliminary radii. The resulting balls share a center and are nested; if their inputs use only $\F_t$, so do the balls.
+\end{proposition}
+\begin{proof}
+By construction, $r_j\geq u_j$ and $r_{j+1}\geq r_j$. For any other nondecreasing upper bound $v$, we have $v_j\geq v_k\geq u_k$ for all $k\leq j$, hence $v_j\geq r_j$. Ordered radii imply nested balls. Finite maxima, exponentiation, and clipping preserve measurability, so updates based on available inputs remain $\F_t$-measurable.
+\end{proof}
+
+Proposition~\ref{prop:nested} guarantees nested sets, not nominal coverage. Adaptive conformal inference~\cite{aci} motivates feedback under changing conditions; its coverage theorem does not apply to our different clipped-radius rule.
+
+\subsubsection{Endpoint quality and onset risk}
+We separate two questions: will an observation be flagged at the endpoint, and will a new flagged episode begin before it? For endpoint quality, let $m_a(t)\in\{0,1\}$ be the supplied flag and $Z(t)=m_L(t)+2m_R(t)$. States $0,1,2,3$ mean neither, left only, right only, or both hands flagged. We correct a transition/frequency prior:
+\begin{equation}
+\pi_z(t,h)=
+\frac{\pi_z^0(t,h)\exp\{\gamma_z(x(t,h))\}}
+{\sum_{j=0}^{3}\pi_j^0(t,h)\exp\{\gamma_j(x(t,h))\}},\qquad z=0,1,2,3.
+\label{eq:endpoint}
+\end{equation}
+\noindent Here $\pi_z^0$ is the prior, floored at $10^{-6}$ before normalization. The corrections are $\gamma_0=0$, $\gamma_1=\eta_L$, $\gamma_2=\eta_R$, and $\gamma_3=\eta_L+\eta_R$, where $\eta_a=2\tanh f_\theta(x_a)$. A shared 32-unit network uses dropout 0.3, 20 epochs, and three averaged seeds. Thus $P_L=\pi_1+\pi_3$, $P_R=\pi_2+\pi_3$, and $P_{\mathrm{any}}=1-\pi_0$ are consistent probabilities.
+
+For advance warning, both hands must currently be unflagged. We define
+\begin{equation}
+\begin{aligned}
+Y^{\mathrm{onset}}_t&=\ind\{\text{a new flagged episode starts in }(t,t+0.5]\},\\
+u(t)&=P(Y^{\mathrm{onset}}_t=1\mid\F_t,Z(t)=0).
+\end{aligned}
+\label{eq:onset}
+\end{equation}
+\noindent Here $u(t)$ is the onset probability, including episodes that recover before the endpoint. Training and validation contain 762 and 215 positive origins, compared with 348 and 97 for endpoint abnormality. Several adjacent origins may refer to the same event.
+
+Video inputs describe blur, boundary proximity, detection/projection agreement, and motion relative to the background. MediaPipe~\cite{mediapipe} provides hand detections; Farneb\"ack flow~\cite{farneback} measures motion from past frames. Both head views are used. The numerical and video models have identical capacity: 150 LightGBM trees, seven leaves, minimum leaf size 200, learning rate 0.03, and L2 regularization 20. Only their inputs differ.
+
+Thresholds use negative training-environment out-of-fold predictions at nominal false-alarm targets of 1\%, 5\%, and 10\%. We measure the realized rates separately on held-out records.

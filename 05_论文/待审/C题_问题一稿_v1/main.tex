@@ -1,0 +1,91 @@
+% !TeX program = xelatex
+% Q1 review draft. AI-assisted drafting and computation: Codex, 2026-11-20.
+\documentclass{swmcmthesis}
+\let\openbox\relax
+\usepackage{amsthm}
+\usepackage{tabularx}
+\usepackage{placeins}
+\usepackage{microtype}
+\usepackage{titlesec}
+\usepackage{needspace}
+\usepackage{float}
+\usepackage{etoolbox}
+\usepackage{indentfirst}
+\usepackage{cite}
+\AtBeginEnvironment{proposition}{\Needspace{14\baselineskip}}
+\normalem
+\newtheorem{proposition}{Proposition}
+\renewcommand{\qedsymbol}{\ensuremath{\square}}
+\renewcommand{\proofname}{\normalfont\bfseries Proof}
+\renewcommand{\team}{Team CSWBMCM2619167}
+\renewcommand{\contentsname}{Contents}
+\renewcommand{\appendixname}{Appendix}
+\linespread{1.08}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+\setlength{\headheight}{20pt}
+\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}
+\clubpenalty=10000
+\widowpenalty=10000
+\brokenpenalty=10000
+\postdisplaypenalty=10000
+\setlength{\textfloatsep}{12pt plus 3pt minus 2pt}
+\setlength{\floatsep}{10pt plus 2pt minus 2pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
+\setlength{\emergencystretch}{1em}
+\setcounter{tocdepth}{2}
+\titleformat{\section}{\large\bfseries}{\thesection}{.65em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{.65em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{.65em}{}
+\titlespacing*{\subsubsection}{0pt}{7pt}{3pt}
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+\titlespacing*{\subsection}{0pt}{9pt}{4pt}
+\captionsetup{font=small,labelfont=bf,textfont=normalfont,labelsep=period,
+ justification=centering,singlelinecheck=true,skip=5pt}
+\captionsetup[figure]{labelfont=bf,textfont=normalfont,labelsep=period}
+\captionsetup[table]{labelfont=bf,textfont=normalfont,labelsep=period}
+\setlist[enumerate]{leftmargin=*,label=\arabic*.,itemsep=3pt,topsep=3pt}
+\hypersetup{pdftitle={State Estimation and Decision Optimization for Restocking Operations},
+ pdfauthor={},pdfsubject={Full-paper framework with Problem 1 results},pdfkeywords={},
+ pdfcreator={XeLaTeX},bookmarksnumbered=true}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert_2}
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\tabref}[1]{Table~\ref{#1}}
+\newcommand{\appfig}[1]{Appendix Figure~\ref{#1}}
+\newcommand{\papergraphic}[2][.88]{\includegraphics[width=#1\linewidth]{#2}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\title{State Estimation and Decision Optimization\\for Restocking Operations}
+\baominghao{SWBMCM2619167}
+\zubie{C}
+\date{2026}
+\abstract{\input{sections/summary.tex}}
+\keywords{}
+\begin{document}
+\pagenumbering{roman}
+\maketitle
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+\fancyhead[L]{\team}
+\fancyhead[R]{Page \thepage\ of \pageref{LastPage}}
+\input{sections/introduction.tex}
+\input{sections/model.tex}
+\input{sections/results.tex}
+\input{sections/later_problems.tex}
+\input{sections/discussion.tex}
+\FloatBarrier
+\input{sections/references.tex}
+\label{LastMainPage}
+\clearpage
+\input{sections/appendix.tex}
+\end{document}

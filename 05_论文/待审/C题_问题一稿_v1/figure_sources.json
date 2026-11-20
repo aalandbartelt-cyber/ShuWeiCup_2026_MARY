@@ -1,0 +1,151 @@
+[
+  {
+    "number": "1",
+    "source": "artifacts/c_q1_v3/data_characteristics/q1v3_data_characteristics.pdf",
+    "local": "figures/main_01.pdf",
+    "sha256": "65a6f5f410dab1fd2cc0f13ccc0382f630461f30563327a9ce8c4d6e4f1626b2",
+    "source_sha256": "b33f2e5624af34baf0febec9099b974cf7b6ba75dd05047ca6cee41cbdace4ac",
+    "layout_source": "artifacts/c_q1_manuscript/reflow/split_data/q1_data_overview.pdf",
+    "layout_note": "Original panels A and F; relabeled A and B.",
+    "layout_group": "split_data"
+  },
+  {
+    "number": "2",
+    "source": "artifacts/c_q1_review_repair/validation_motion.pdf",
+    "local": "figures/main_02.pdf",
+    "sha256": "92e4c560d5976101d52796cc6382707360b35879ba480e6be4e2e91faf73faf6",
+    "source_sha256": "92e4c560d5976101d52796cc6382707360b35879ba480e6be4e2e91faf73faf6",
+    "layout_note": "A: environment-balanced validation errors; B: dataset reductions on identical qualified targets."
+  },
+  {
+    "number": "3",
+    "source": "artifacts/c_q1_review_repair/validation_coverage.pdf",
+    "local": "figures/main_03.pdf",
+    "sha256": "e32fab07dbe2cbf47162e4b73c96a94451ffb0bb5b8c7cd1a746f40411eaeb25",
+    "source_sha256": "e32fab07dbe2cbf47162e4b73c96a94451ffb0bb5b8c7cd1a746f40411eaeb25",
+    "layout_note": "Validation nominal-90% coverage and mean radius; bar labels eliminate overlapping traces. Different point predictors: pipeline comparison."
+  },
+  {
+    "number": "4",
+    "source": "artifacts/c_q1_review_repair/validation_video.pdf",
+    "local": "figures/main_04.pdf",
+    "sha256": "165ecb9d7cd78183d139e2b8b41b2e6d144a366f0c4995c35a26106e0d3b4a07",
+    "source_sha256": "165ecb9d7cd78183d139e2b8b41b2e6d144a366f0c4995c35a26106e0d3b4a07",
+    "layout_note": "Validation AP and event recall versus false-alarm fraction; labels are thresholds fixed using training origins; 22 events, not independent origins."
+  },
+  {
+    "number": "5",
+    "source": "artifacts/c_q1_v3/fixed_figures/q1v3_video_alignment_controls.pdf",
+    "local": "figures/main_05.pdf",
+    "sha256": "9ac76ece30905c6a3fb78b6bba2feb65c5bcaa459dd96fa20f08932b993811cc",
+    "source_sha256": "19e7861ca9380f155327a2c55a91ccbe967f0688a0810eab77bbf57ad35881ac",
+    "layout_source": "artifacts/c_q1_manuscript/reflow/fixed/q1v3_video_alignment_controls.pdf",
+    "layout_note": "Reflowed at manuscript width; scientific source and values retained."
+  },
+  {
+    "number": "6",
+    "source": "artifacts/c_q1_v3/video_case_figure/q1v3_video_keyframes.pdf",
+    "local": "figures/main_06.pdf",
+    "sha256": "02b78a06c1f1ca3f39e51842e2adc6a4478015fd5fd9422e1246fc7fa750ce59",
+    "source_sha256": "1d0e2e6c3df511aaaaba236b89893bdbc35829068491c69b3db610639ffc15ad",
+    "layout_source": "artifacts/c_q1_manuscript/reflow/video/q1v3_video_keyframes.pdf",
+    "layout_note": "Reflowed at manuscript width; scientific source and values retained."
+  },
+  {
+    "number": "B.1",
+    "source": "artifacts/c_q1_v3/assessment/figures/q1v3_state_development.pdf",
+    "local": "figures/appendix_A1.pdf",
+    "sha256": "75e678ca2f3899b1560fc8506f86ea1dffaa42603d27b073a58b24ba13c92f7f",
+    "source_sha256": "ad91415574d3a7bc6e550c31f262daa601a49f4f2f81702a6d1f91c5cf329220",
+    "layout_source": "artifacts/c_q1_manuscript/reflow/progress/q1v3_state_development.pdf",
+    "layout_note": "Reflowed at manuscript width; scientific source and values retained."
+  },
+  {
+    "number": "B.2",
+    "source": "artifacts/c_q1_v3/figures_legend_revision/q1v2_state.pdf",
+    "local": "figures/appendix_A2.pdf",
+    "sha256": "d0dcd17e5b49b6da45f87300185dfd9a7a02f8febdd09cb9f05ede216bef186a",
+    "source_sha256": "328b92e847360295ddba1509e1a6d32a265d03d23df1f8cfb2cdf175ef3c509e",
+    "layout_source": "artifacts/c_q1_manuscript/reflow/v2/q1v2_state.pdf",
+    "layout_note": "Reflowed at manuscript width; scientific source and values retained."
+  },
+  {
+    "number": "B.3",
+    "source": "artifacts/c_q1_v3/assessment/figures/q1v3_radius_development.pdf",
+    "local": "figures/appendix_A3.pdf",
+    "sha256": "c852e3c0ce75894d74a3ba3005886289d3d2e2910e8130cec2f077f26fff3cfc",
+    "source_sha256": "7318a40327525e7c1fa067e09546c41c051c5b037433648089313b5593a86189",
+    "layout_source": "artifacts/c_q1_manuscript/reflow/progress/q1v3_radius_development.pdf",
+    "layout_note": "Reflowed at manuscript width; scientific source and values retained."
+  },
+  {
+    "number": "B.4",
+    "source": "artifacts/c_q1_v3/assessment/figures/q1v3_video_generalization.pdf",
+    "local": "figures/appendix_A4.pdf",
+    "sha256": "2e0a7ac5bfa59ef08f595477e07b0c45ca909391be7b18ed9d784416f74fbed1",
+    "source_sha256": "f540a0b2d242958cdf115ad3a1bbbcb630ef56a8ae5c0f4b1c5d1f5db3a562eb",
+    "layout_source": "artifacts/c_q1_manuscript/reflow/progress/q1v3_video_generalization.pdf",
+    "layout_note": "Reflowed at manuscript width; scientific source and values retained."
+  },
+  {
+    "number": "B.5",
+    "source": "artifacts/c_q1_v3/figures_legend_revision/q1v2_quality.pdf",
+    "local": "figures/appendix_A5.pdf",
+    "sha256": "d652ed5bb03a4631b70fe814d24b13036935fae808b6b5dcbaac8e89ddfb534a",
+    "source_sha256": "a25dee7593d00f3ac8312527d61c35fc90e586a07872f05b4ca691d0dfe53d2a",
+    "layout_source": "artifacts/c_q1_manuscript/reflow/v2/q1v2_quality.pdf",
+    "layout_note": "Reflowed at manuscript width; scientific source and values retained."
+  },
+  {
+    "number": "B.6",
+    "source": "artifacts/c_q1_v3/figures_legend_revision/q1v2_context.pdf",
+    "local": "figures/appendix_A6.pdf",
+    "sha256": "534fa7a848c8e01726be9ef881073f08ee1980338450d2adf4c172e3fa382a30",
+    "source_sha256": "acf36686d3603b87602c1321f6c927d0efbe9911945e279f6c226a3dfabb8a2a",
+    "layout_source": "artifacts/c_q1_manuscript/reflow/v2/q1v2_context.pdf",
+    "layout_note": "Reflowed at manuscript width; scientific source and values retained."
+  },
+  {
+    "number": "B.7",
+    "source": "artifacts/c_q1_v3/figures_legend_revision/q1v2_geometry.pdf",
+    "local": "figures/appendix_A7.pdf",
+    "sha256": "29b091f5bbe3a4406d0be01129583734d20df7ee0a8f703929579490f077ab83",
+    "source_sha256": "409deb27d3f81f0c90f7af9fc6b80757690f740588f1d9ced9c736558fb6bcea",
+    "layout_source": "artifacts/c_q1_manuscript/reflow/v2/q1v2_geometry.pdf",
+    "layout_note": "Reflowed at manuscript width; scientific source and values retained."
+  },
+  {
+    "number": "B.8",
+    "source": "artifacts/c_q1_v3/data_characteristics/q1v3_data_characteristics.pdf",
+    "local": "figures/appendix_B8.pdf",
+    "source_sha256": "b33f2e5624af34baf0febec9099b974cf7b6ba75dd05047ca6cee41cbdace4ac",
+    "sha256": "d526bb3635fb8f13223471954ea687af841ca0117c39330b7b3911dacfdf5ba0",
+    "layout_source": "artifacts/c_q1_manuscript/reflow/split_data/q1_data_diagnostics.pdf",
+    "layout_group": "split_data",
+    "layout_note": "Original panels B, C, D, E; relabeled A, B, C, D."
+  },
+  {
+    "number": "B.9",
+    "source": "artifacts/c_q1_review_repair/horizon_diagnostics.pdf",
+    "local": "figures/appendix_B9.pdf",
+    "sha256": "867c58a1698e0ff0cf8163c99f93f73b4cd0ca6b2254ffdfe3719c2c25ad88ae",
+    "source_sha256": "867c58a1698e0ff0cf8163c99f93f73b4cd0ca6b2254ffdfe3719c2c25ad88ae",
+    "layout_note": "Validation point errors (5 horizons), existing baseline radii/coverage (4 horizons), and dataset gains. Conditional radii only at 0.1 s; no sparse-history claim."
+  },
+  {
+    "number": "B.10",
+    "source": "artifacts/c_q1_review_repair/environment_diagnostics.pdf",
+    "local": "figures/appendix_B10.pdf",
+    "sha256": "cd2e645c618625da45054582949c518b3313fc49082c2c334f878d2f538c7572",
+    "source_sha256": "cd2e645c618625da45054582949c518b3313fc49082c2c334f878d2f538c7572",
+    "layout_note": "Validation environment means and record-balanced hand flag rates; E1–E4 map to source CSV and appendix text. Descriptive, no frame-independent confidence intervals."
+  },
+  {
+    "number": "B.11",
+    "source": "artifacts/c_q1_review_repair/failure_trajectories.pdf",
+    "local": "figures/appendix_B11.pdf",
+    "sha256": "193b7bb31253032ce64f2b4e74ed573e26435c6c8710b45f94d4e474955c0224",
+    "source_sha256": "193b7bb31253032ce64f2b4e74ed573e26435c6c8710b45f94d4e474955c0224",
+    "layout_note": "Two post hoc validation failures at 0.5/1 s; native coordinate offset displayed; forecasts reproduced on CPU from unchanged checkpoints. Selection is descriptive, not additional independent evaluation."
+  }
+]

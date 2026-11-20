@@ -1,0 +1,56 @@
+\section{Introduction}
+\subsection{Problem background}
+Restocking in unmanned supermarkets depends on reliable observations and timely decisions. Occlusion and changing motion make operational states uncertain, while obtaining more information consumes time and resources. The supplied human-operation records support three linked tasks: estimating states, deciding when to observe again, and scheduling restocking jobs. Their use requires distinguishing hand states from product states and recorded human operations from robot performance.
+
+\subsection{Problem restatement}
+\noindent\textbf{Problem 1: Operational states and observation reliability.}
+Organize EgoDemo, EgoPro, and EgoStandard, and identify usable records and intervals. Define a common operational state, model its changes and observation reliability, and examine task, environment, and stage effects. Validate against simple baselines, reporting uncertainty and failure cases.
+
+\noindent\textbf{Problem 2: Prediction and re-observation.}
+Retain the state defined in Problem 1. Predict it during missing observations, update uncertainty when information returns, and choose request times and waiting arrangements. Use controlled masking and replay to compare prediction error, observation cost, and waiting; analyze natural occlusion separately.
+
+\noindent\textbf{Problem 3: Restocking scheduling.}
+Use operation records to estimate job durations and their uncertainty. For cases S1--S3, determine job order, service reservations, paid reviews, and waiting under time, budget, and precedence constraints. Assess completion, on-time service, cost, and equipment occupancy.
+
+\section{Problem Analysis}
+\subsection{Analysis of Problem 1}
+Motion changes and observation errors can produce similar recorded variations. The analysis must therefore separate state dynamics from observation reliability. After data alignment and quality screening, we compare prediction and reliability models across environments and stages. The resulting state definition and uncertainty estimates provide the basis for Problem 2.
+
+\subsection{Analysis of Problem 2}
+Uncertainty grows while observations are unavailable, but another observation has both a cost and a delay. Prediction and request decisions must use only information already received. Shared masking windows and resource limits allow a fair policy comparison. The key question is whether the expected reduction in uncertainty justifies another request.
+
+\subsection{Analysis of Problem 3}
+Duration uncertainty links information quality to scheduling: overruns delay later jobs, while early completion leaves reserved idle time. State summaries from permitted numerical prefixes must first be related to job durations; position uncertainty is not itself duration uncertainty. Job order, reservations, and paid reviews can then be evaluated jointly through paired trials under the supplied rules.
+
+\Needspace{12\baselineskip}
+\section{Model Assumptions and Notation}
+\subsection{Core assumptions}
+\begin{enumerate}
+\item \textbf{Consistent measurements.} Stored coordinates share a stable frame within each record. Timestamp, geometry, and projection checks assess consistency; undocumented physical units and world-axis directions limit physical interpretation.
+\item \textbf{Useful qualified references.} Finite, unflagged target coordinates support comparative evaluation, although they need not be error-free. Flagged coordinates support reliability analysis rather than physical error claims.
+\item \textbf{Short-horizon predictability.} Recent motion informs near-future displacement and observation quality. Abrupt changes can violate this approximation; horizon and failure analyses test its limits.
+\end{enumerate}
+
+\subsection{Principal notation}
+\begin{table}[H]
+\centering
+\small
+\caption{Principal notation}
+\label{tab:notation}
+\begin{tabularx}{\linewidth}{lX}
+\toprule
+Symbol & Meaning\\
+\midrule
+$a,\ k,\ g$ & Hand ($L$ or $R$), landmark index, and dataset index\\
+$t_i,\ h$ & Observation time and requested forecast horizon (s)\\
+$p_{a,k},\ c_a,\ v_a$ & Landmark position, hand center, and causal velocity\\
+$s(t),\ \F_t$ & Shared two-hand state and information available at time $t$\\
+$d_g,\ e_{a,j},\ x_a$ & Training hand scale, normalized displacement expert, gate features\\
+$\omega_{g,j},\ \delta_{a,j}$ & Baseline coefficient and bounded adaptive correction\\
+$E_a,\ r_{a,q},\ B_{a,q}$ & Normalized center error, radius, and prediction ball at level $q$\\
+$m_a(t),\ Z(t)$ & Supplied per-hand bad flag and joint four-state quality label\\
+$\pi_z,\ u(t)$ & Endpoint-state probability and window-onset probability\\
+\bottomrule
+\end{tabularx}
+\end{table}
+Coordinate units remain those supplied with the data.

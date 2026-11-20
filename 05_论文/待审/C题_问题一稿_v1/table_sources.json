@@ -1,0 +1,13 @@
+{
+  "artifacts/c_q1_review_repair/sampling_distribution.csv": "d5a9e511e4d7414b97f04b0983a67c8be30eca9948244bd95f708475f72d34fe",
+  "artifacts/c_q1_v3/frozen_numeric/validation/radius_metrics.csv": "e386ef0ac54b54f93b77b6c4276cbec0d27712eae0002ff85048f346132fe887",
+  "artifacts/c_q1_review_repair/validation_point_metrics.csv": "9df296e85fe93e8588b1cc3ea2bd478f773bab9a740619780d2f8739e0f9c36b",
+  "artifacts/c_q1_v3/frozen_numeric/test/point_metrics.csv": "cf7a46ba4c2e1f9d3bcb58535b2cac45621e6b9b58d31e1a46ac12952ed27849",
+  "artifacts/c_q1_review_repair/semantic_descriptives.csv": "2c194758e392c08f117973f39aa24bd0043239c04845c4d5eddd33e29c769eae",
+  "artifacts/c_q1_v3/frozen_numeric/test/radius_metrics.csv": "f2bed6336b1138d638158fd20f9b2a48a30ee26497ad34ae79f5219797d535cf",
+  "artifacts/c_q1_v3/onset_h0.5/metrics.csv": "fd0f270af29db7304f894c303baebcce2487f8085113f0c1a9c58154ea5d85cc",
+  "artifacts/c_q1_v2/state_parameter_uncertainty.csv": "fdf0ce40cc55de0ab596b16ecfef1280ba923f108393d5914cfb9444ce4a7a6c",
+  "artifacts/c_q1_v2/state_set_validation.csv": "849739b0df3f71e8cf88cd41cb4b27c1581a6fe5064bc1fab6cd468fc1ac1331",
+  "artifacts/c_q1_review_repair/purpose_counts.csv": "3cdfca4dd8594b2a35af01c6135bd03baa33f8812b4940a02bd85e40fd6bfcad",
+  "artifacts/c_q1_v3/frozen_quality/test/onset_metrics.csv": "225e105af1071caae55782ad3d8fd8c743b371a56f1f001fec2e57bbadf145fd"
+}

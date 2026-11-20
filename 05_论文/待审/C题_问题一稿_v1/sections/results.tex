@@ -1,0 +1,99 @@
+\subsection{Model solution and validation}
+\subsubsection{Numerical implementation}
+We use Python 3.10.19, NumPy 2.2.6 linear solves, and SciPy 1.15.3 \texttt{minimize} with L-BFGS-B for bounded distance fitting. The latter uses analytic gradients, bounds $[-2,2]$, and regularization $10^{-2}$; it reaches 180 iterations, but a tighter refit changes its objective by only $6.7\times10^{-8}$. Neural models use PyTorch 2.12 (development build), \texttt{torch.optim.AdamW}, CUDA 12.8, and an \textbf{NVIDIA GeForce RTX 5070 Ti Laptop GPU}. Seeds are 20261120--20261122. LightGBM 4.6.0 \texttt{LGBMRegressor} (quantile) and \texttt{LGBMClassifier} (binary) run on two CPU threads. NumPy's pseudoinverse fits stage associations; detection and optical flow run on CPU. Further solver settings are retained with the source archive.
+
+\subsubsection{Evaluation design and motion prediction}
+We fit on 16 training environments, select on 4 validation environments, and obtain training predictions by four-fold, whole-environment holdout. \textbf{Validation and training OOF are the main evidence.} Because validation also guided selection, its intervals are descriptive rather than an independent final confirmation.
+
+The baseline was frozen at 07:28:09 UTC on 20 November 2026 before its test run. The present numerical and quality models were frozen at 09:32:12 and 09:39:51 UTC, after those test results had been observed. Their test results are therefore supplementary fixed-version rechecks (Appendix Table~\ref{tab:test_supplement}), not an untouched holdout. Stored manifests and hashes establish this order. All supplementary rechecks retain the frozen models and thresholds.
+
+Mean center error balances environments, records, and hands:
+\begin{equation}
+\operatorname{Err}=
+\frac{1}{|\E|}\sum_{e\in\E}\frac{1}{|\mathcal R_e|}
+\sum_{r\in\mathcal R_e}\frac12\sum_{a\in\{L,R\}}
+\frac{1}{|\mathcal I_{r,a}|}\sum_{i\in\mathcal I_{r,a}}
+\norm{c_a(t_{j(i,h)})-\widehat c_a(t_{j(i,h)})}.
+\label{eq:metric}
+\end{equation}
+\noindent Here $\E$ is the environment set, $\mathcal R_e$ contains its records, and $\mathcal I_{r,a}$ contains qualified origins for each hand. Both hands have eligible references. This prevents long records from dominating. Uncertainty intervals resample environments, not adjacent frames.
+
+At 0.1 s, two-point extrapolation already reduces validation error by 52.63\% against holding the last center. Adaptation further reduces error by 12.49\% against two-point extrapolation and 7.60\% against the four-scale model (\tabref{tab:point}; errors in native units multiplied by 1000). Its extra role is adjusting the response to recent motion; complexity alone is not the objective. Against four-scale prediction, it improves 15/16 training and 4/4 validation environments. Mean reductions are 4.98\% and 7.60\%, with descriptive environment-bootstrap intervals [3.20\%, 6.85\%] and [5.50\%, 9.96\%].
+\input{tables/point.tex}
+
+\figref{fig:point} compares validation baselines (A) and dataset-specific gains (B). Aggregate gains persist across five horizons, but do not hold in every dataset (\appfig{fig:A9}A,D). Baseline coefficient uncertainty is given in \tabref{tab:coef}.
+
+DINOv2 appearance features~\cite{dinov2}, articulated landmarks, stereo-ray features, and short GRU histories did not consistently improve the main targets. A small visual residual gain also disappeared under nested training.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/main_02.pdf}
+\caption{Hand-center prediction at 0.1 s}
+\label{fig:point}
+\end{figure}
+\FloatBarrier
+
+\subsubsection{Coverage and sequential consistency}
+At nominal 90\%, validation coverage rises from 88.80\% to 90.08\%, while mean radius decreases from 0.019727 to 0.018731 native units. Each dataset is close to nominal coverage, but EgoStandard's pinball loss worsens (\tabref{tab:coverage}). Thus better aggregate calibration does not imply improvement in every loss or subgroup.
+
+The table reports coverage $C$ in percent, mean radius $r$, and pinball loss $L$ in native units. Subscripts base and cond denote motion-scaled and conditional-feedback methods. \figref{fig:coverage} directly labels coverage (A) and radius (B). Point predictors differ, so this compares complete pipelines; \appfig{fig:A3} shows calibration without final feedback/floor rules.
+\input{tables/coverage.tex}
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/main_03.pdf}
+\caption{Prediction-ball coverage and radius}
+\label{fig:coverage}
+\end{figure}
+
+Dense sequential replay covers 13,187 qualified validation pairs. Its point-error difference from batch evaluation is below $9.75\times10^{-8}$ native units, and issued radii match exactly. Later-flagged targets never update qualified residual history. All balls concern one hand, not simultaneous two-hand coverage.
+
+\appfig{fig:A9}B,C reports the existing four-scale model's motion-scaled radii across 0.1--1 s, calibrated from training OOF errors. Mean radius grows from 0.0197 to 0.3723 native units, while validation coverage drops from 88.80\% to 85.95\%. These curves describe dense-history forecasts, not the conditional-feedback model beyond 0.1 s. With requests every 0.2/0.5 s and delays of 0/0.1 s, its separate conditional-radius probe gives only 76.17\%--91.33\% coverage. Problem 2 must calibrate under its own masked histories; neither a power-law extrapolation nor the dense curve alone supplies a safe prediction duration.
+\FloatBarrier
+
+\subsubsection{Video-assisted onset warning}
+Endpoint and onset scores answer different questions: persistent good observations can give a small endpoint Brier score without warning of new events. Endpoint ablations are given in \appfig{fig:A4}--\ref{fig:A5}; the following comparison concerns onset warning.
+
+For observed onset $y_n\in\{0,1\}$ and predicted probability $u_n$, the Brier score is $\sum_n w_n(u_n-y_n)^2$; lower is better. Average precision (AP) summarizes precision--recall ranking; higher is better. The matched models in \tabref{tab:onset} differ only in video inputs.
+\input{tables/onset.tex}
+
+Validation AP increases from 0.142 to 0.202, an absolute gain of 0.060. At the threshold fixed from training for 5\% false alarms, video detects 16/22 events versus 14/22, with realized false-alarm fractions 7.12\% versus 13.33\% and median leads 0.333 versus 0.433 s. Environment-resampled 95\% recall intervals are wide: [33.3\%, 100\%] and [33.3\%, 77.8\%]. Adjacent positive origins are not independent events; these four-environment intervals are descriptive. The evidence for an incremental video benefit is suggestive.
+
+\figref{fig:onset} compares AP (A) and event recall against realized false alarms (B). Point labels identify training threshold targets, which need not equal held-out false-alarm rates.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/main_04.pdf}
+\caption{Video-assisted onset prediction}
+\label{fig:onset}
+\end{figure}
+
+Delaying or permuting video tests the value of temporal alignment (\figref{fig:controls}). Validation AP falls from 0.2021 to 0.0565/0.0812/0.0684 under 0.5/1/2 s delays, and to 0.0719 under within-record permutation. The latter is a diagnostic control. Brier reduction is 1.95\% in training OOF and 1.58\% in validation; the corresponding intervals are [0.57\%, 3.78\%] and [$-1.13$\%, 3.58\%]. Only 2/4 validation environments improve, so a general Brier advantage is not established.
+\begin{figure}[!htbp]
+\centering
+\papergraphic[.82]{figures/main_05.pdf}
+\caption{Video timing-disruption controls}
+\label{fig:controls}
+\end{figure}
+
+\figref{fig:frames} illustrates one validation event. Video warns 0.467 s before onset; the numerical model does not cross its threshold within the warning window. Columns correspond to $-0.467$, $-0.267$, $-0.067$, and $+0.100$ s. Row A shows the latest head-left frames; row B enlarges the marked crop, showing detected landmarks, projected centers, and GPU-computed 0.1 s forecasts. Row C shows background-compensated flow on a shared frame-width/s scale, capped at the pooled 99th percentile. Panel D links these times to probabilities, thresholds, and supplied flags.
+
+The model uses both head views; only the left is displayed. Projections use the available camera pose. GPU point forecasts agree with CPU inference within $3.8\times10^{-9}$ per coordinate; detection, flow, and onset prediction run on CPU. This selected case explains the method rather than estimating its overall performance.
+\begin{figure}[!htbp]
+\centering
+\papergraphic{figures/main_06.pdf}
+\caption{Video keyframes and causal analysis}
+\label{fig:frames}
+\end{figure}
+\subsubsection{Task and stage associations}
+No full task description recurs across development environments, so between-record comparisons cannot separate task, operator, and environment effects. We instead analyze within-record associations. Keyword actions may overlap, and annotated intervals are divided into early, middle, and late thirds:
+\begin{equation}
+y_{rj}=\zeta_r+\vartheta^\top a_{rj}
++\gamma_M\ind\{\text{middle}\}+\gamma_L\ind\{\text{late}\}+\varepsilon_{rj}.
+\label{eq:context}
+\end{equation}
+\noindent Here $y_{rj}$ is a phase-level outcome, $\zeta_r$ absorbs record constants, $\vartheta$ contains action coefficients, $a_{rj}$ gives action indicators, and $\varepsilon_{rj}$ is the residual. Outcomes are flagged fraction and mean $\log(1+\mathrm{speed})$. Intervals cover 53,553/53,829 timestamps; 2,000 environment resamples give \appfig{fig:A6}. Complete action descriptives and validation environment comparisons appear in \tabref{tab:semantic_desc} and \appfig{fig:A10}; overlapping action labels are not exclusive task counts.
+
+The middle stage is associated with a 1.175-percentage-point lower flagged fraction (95\% interval: $-2.135$ to $-0.353$ points). Arrangement has log-speed coefficient $-0.1068$ (interval [$-0.1673$, $-0.0520$]). The design rank is 7/8 because the reach label has no support; its zero fitted coefficient is not a zero-effect finding. These stages are retrospective, and the associations are not causal.
+
+\subsubsection{Failure cases and applicability}
+EgoStandard validation error increases against the four-scale model at $1/30$, 0.5, and 1 s (\appfig{fig:A9}D). \appfig{fig:A11} shows the largest excess-error cases at 0.5 and 1 s. The first origin is flagged; the second is unflagged but has recently flagged history. Both later references are qualified. Long extrapolation from unreliable recent coordinates can therefore defeat the adaptive correction; its bound does not guarantee improvement. These post hoc cases explain failure, not prevalence. CPU reproduction differs from saved errors by less than $3.1\times10^{-7}$ native units.
+
+Rare quality states remain weakly supported: the supplementary test contains only 66 currently flagged hand origins with qualified later references. Supplied flags and coordinates are proxies, and physical truth and coordinate-unit documentation are unavailable. Operator overlap, validation-based selection, and previously observed test results limit generalization. The next problem must assess tolerance and uncertainty under masked observations while preserving the same hand-state definition.

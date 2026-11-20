@@ -1,0 +1,41 @@
+{
+  "version": "q1-v2-20261120",
+  "seed": 20261120,
+  "horizons_s": [
+    0.03333333333333333,
+    0.1,
+    0.2,
+    0.5,
+    1.0
+  ],
+  "main_horizon_s": 0.1,
+  "warmup_s": 0.4,
+  "target_tolerance_steps": 0.55,
+  "lags_s": [
+    0.03333333333333333,
+    0.1,
+    0.2,
+    0.4
+  ],
+  "ridge_penalties": [
+    0.001,
+    0.01,
+    0.1,
+    1.0,
+    10.0
+  ],
+  "coverage_levels": [
+    0.5,
+    0.8,
+    0.9,
+    0.95
+  ],
+  "quality_false_alarm_levels": [
+    0.01,
+    0.05,
+    0.1
+  ],
+  "visual_rate_hz": 15,
+  "validation_selection": "equal environment/episode normalized error; quality Brier with event diagnostics",
+  "test_status": "unopened; freeze required"
+}

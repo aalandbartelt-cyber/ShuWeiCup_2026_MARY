@@ -17,6 +17,12 @@ Before making changes:
 5. Read the ShuWei skill:
    `/home/mary/.codex/skills/mary-modeling-contest-pipeline-shuwei/SKILL.md`
    Then read the task-relevant files under `references/` (at least 01, 02, 05, 15, 18, 19, 20, 21 when applicable).
+6. For manuscript writing, figures, integration, or review, read:
+   `02_口径与约定/论文写作与审稿规范.md` and `02_口径与约定/图表规范.md`.
+   Preserve the current deferred sections: Summary and Keywords are blank;
+   Sections 7 and 8 have titles only; Appendix A is deferred until the final stage.
+   Use the three-problem structure and the feedback/checklist in these files.
+   Later explicit user instructions supersede this snapshot; update the documents accordingly.
 
 Role:
 

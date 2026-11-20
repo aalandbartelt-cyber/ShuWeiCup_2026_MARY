@@ -1,0 +1,30 @@
+{
+  "version": "shuwei-20261120-v1",
+  "font_family": "Times New Roman",
+  "base_font_pt": 10,
+  "tick_font_pt": 9,
+  "legend_font_pt": 9,
+  "minimum_text_pt": 8,
+  "full_width_inches": 7.0,
+  "raster_dpi": 600,
+  "allow_in_figure_titles": false,
+  "palette": {
+    "neutral": "#9A9A9A",
+    "blue": "#466C9B",
+    "green": "#228B77",
+    "orange": "#D88C32",
+    "mauve": "#B85C7B",
+    "text": "#25333A",
+    "grid": "#E2E7E9"
+  },
+  "model_colors": {
+    "constant": "neutral",
+    "linear": "blue",
+    "filter": "orange",
+    "multiscale_linear": "green",
+    "dataset_rate": "neutral",
+    "flag_transition": "green",
+    "numeric_boosting_raw": "blue",
+    "multimodal_boosting_raw": "mauve"
+  }
+}
