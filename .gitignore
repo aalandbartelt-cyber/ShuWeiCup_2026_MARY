@@ -41,3 +41,6 @@ docs/collab/*.lock
 
 # local R2 extraction (third-party paper pages; not redistributed)
 docs/analysis/shuwei/round2_visual/
+
+# official problem releases / C dataset (large, local-only)
+00_赛题与规则/正式发布/
