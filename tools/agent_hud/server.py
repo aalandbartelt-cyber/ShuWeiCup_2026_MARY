@@ -13,6 +13,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
@@ -21,6 +22,12 @@ HERE = Path(__file__).resolve().parent
 DEFAULT_ROOT = HERE.parents[1]
 SKILL_NAME = "mary-modeling-contest-pipeline-shuwei"
 DEFAULT_SKILL = Path.home() / ".codex" / "skills" / SKILL_NAME
+
+sys.path.insert(0, str(HERE.parent / "agent_bus"))
+try:
+    import bus as agent_bus
+except Exception:  # pragma: no cover - HUD still works without the bus
+    agent_bus = None
 
 
 def read_json(path: Path, default):
@@ -130,6 +137,14 @@ def build_state(root: Path) -> dict:
     blockers = bullets(find_section(sec, "阻塞"))
     ownership = bullets(find_section(sec, "正式件所有权"))
 
+    bus_file = root / "docs" / "collab" / "AGENT_MESSAGES.jsonl"
+    if agent_bus is not None and bus_file.is_file():
+        bus_state = agent_bus.summary(root)
+    else:
+        bus_state = {"path": str(bus_file), "total": 0, "active": 0,
+                     "by_agent": {a: {"unread": 0, "claimed": 0, "done": 0} for a in ("codex", "cursor", "zcode", "dsh")},
+                     "recent": []}
+
     return {
         "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
         "repo": str(root),
@@ -138,6 +153,7 @@ def build_state(root: Path) -> dict:
         "agents": cfg.get("agents", []),
         "flows": cfg.get("flows", []),
         "notes": cfg.get("notes", []),
+        "bus": bus_state,
         "handoff": {
             "path": str(handoff_path),
             "exists": handoff_path.is_file(),
@@ -179,6 +195,11 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/healthz":
             self._send(200, b"ok", "text/plain; charset=utf-8")
             return
+        if path.startswith("/icons/"):
+            p = (HERE / "icons" / path.removeprefix("/icons/")).resolve()
+            if p.is_file() and HERE.resolve() in p.parents:
+                self._send(200, p.read_bytes(), "image/png")
+                return
         files = {
             "/": ("index.html", "text/html; charset=utf-8"),
             "/index.html": ("index.html", "text/html; charset=utf-8"),

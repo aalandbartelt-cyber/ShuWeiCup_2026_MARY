@@ -6,7 +6,9 @@
     {
       "id": "codex",
       "name": "Codex",
+      "identity": "OpenAI Codex (WSL)",
       "runtime": "WSL / VS Code Remote",
+      "entry": "codex extension / CLI",
       "role": "Primary",
       "status": "standby",
       "quota": "unknown",
@@ -16,7 +18,9 @@
     {
       "id": "cursor",
       "name": "Cursor",
+      "identity": "Cursor Agent (WSL)",
       "runtime": "WSL",
+      "entry": "cursor-agent (WSL) / Cursor IDE",
       "role": "Backup primary",
       "status": "standby",
       "quota": "unknown",
@@ -26,7 +30,9 @@
     {
       "id": "zcode",
       "name": "ZCode",
+      "identity": "ZCode (this Windows agent)",
       "runtime": "Windows",
+      "entry": "ZCode desktop",
       "role": "Support",
       "status": "standby",
       "quota": "n/a",
@@ -36,7 +42,9 @@
     {
       "id": "dsh",
       "name": "DeepSeek Harness",
+      "identity": "DeepSeek Harness (dsh)",
       "runtime": "Windows",
+      "entry": "C:\\Users\\mary3\\AppData\\Local\\Programs\\DeepSeek Harness\\DeepSeek Harness.exe",
       "role": "Review",
       "status": "standby",
       "quota": "n/a",
@@ -72,6 +80,9 @@
   ],
   "notes": [
     "HUD is observability only; CURSOR_HANDOFF.md + git are the source of truth.",
+    "Cross-agent requests/replies use docs/collab/AGENT_MESSAGES.jsonl (AGENT_BUS.md).",
+    "orchestrator.py can auto-run Codex, or Cursor after a one-time `agent login`.",
+    "coordinator.py takes bounded turns; it stops on max turns/minutes/failures or AGENT_BUS_STOP.",
     "Cursor cannot resume Codex threads; it reads the handoff.",
     "Formal paper/package remains Codex-owned unless the user explicitly authorizes Cursor."
   ]

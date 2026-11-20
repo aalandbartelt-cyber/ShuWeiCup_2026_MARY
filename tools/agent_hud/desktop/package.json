@@ -1,0 +1,13 @@
+{
+  "name": "shuwei-ai-ops-hud",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frameless always-on-top AI Ops HUD for the ShuWei competition workspace",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^45.3.1"
+  }
+}

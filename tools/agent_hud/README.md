@@ -2,7 +2,7 @@
 
 ![AI Ops HUD](preview.png)
 
-参考 `agent-hud-open` 的“状态卡 + 额度色 + 一跳回会话”思路，但这是一个**本地只读**、零依赖的简化版：
+参考 `agent-hud-open` 的 Simple/Notch 形态：一排 agent 品牌图标 + 额度环，hover/click 展开一张小卡片；不是大 dashboard。**本地只读、零依赖**：
 
 - 不安装客户端 hook，不读取密钥，不调用外部 API；
 - 唯一事实源是 `docs/collab/CURSOR_HANDOFF.md` + Git + skill 文件；
@@ -25,9 +25,13 @@ http://127.0.0.1:8765/
 
 不依赖 Node/npm；只用 Python 标准库。Windows 浏览器可直接访问 WSL 转发端口（若没有自动转发，用 `wsl hostname -I` 查 WSL IP，或从 Windows 侧运行 `python` 读取 `\\wsl.localhost` 路径）。
 
+## Agent 图标
+
+`icons/` 使用 Agent HUD 开源仓库的 provider 图标（Codex/ChatGPT、Cursor、ZCode、DeepSeek），用于队内识别；来源与归属见 `icons/NOTICE.md`。若要对外分发，先核对各品牌商标/使用条款。
+
 ## 数据源
 
-- `tools/agent_hud/ai_flow.json`：角色、手动额度色（unknown/green/yellow/red/n/a）、flow 标签；
+- `tools/agent_hud/ai_flow.json`：角色、身份/入口、手动额度色（unknown/green/yellow/red/n/a）、flow 标签；dsh 入口为 `C:\Users\mary3\AppData\Local\Programs\DeepSeek Harness\DeepSeek Harness.exe`；
 - `docs/collab/CURSOR_HANDOFF.md`：当前 owner、下一步、阻塞、正式件所有权；
 - `git status/log`：分支、未提交、最近提交；
 - skill：默认 `~/.codex/skills/mary-modeling-contest-pipeline-shuwei`，可用 `SHUWEI_SKILL_DIR` 覆盖；
