@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "agent_bus": {
+      "command": "python3",
+      "args": [
+        "/home/mary/shuwei2026/tools/agent_bus/mcp_server.py",
+        "--agent",
+        "cursor"
+      ]
+    }
+  }
+}

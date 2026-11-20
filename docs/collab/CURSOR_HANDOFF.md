@@ -23,14 +23,14 @@ Cursor 不自动加载；必须显式读。任务相关再读 `references/01,02,
 ## 3. 当前目标与验收
 
 - 当前不是比赛日；没有进行中的正式论文任务。
-- 已完成的准备：官方格式/模板、AI 报告模板、专家写作/流程规则、skill 55 文件、双端同步。
+- 已完成的准备：官方格式/模板、AI 报告模板、专家写作/流程规则、skill 56 文件、双端同步。
 - 比赛开始后，从用户粘贴的赛题与 `00_赛题与规则/赛事参数.md` 起，按 skill 的 4 天流程执行。
 
 ## 4. 已完成（证据）
 
 - 官方文件：`00_赛题与规则/2026官方更新_20261111/`
 - AI 报告模板：`06_交付/04_支撑材料/AI_Tool_Usage_Report_Template.docx`
-- Skill 双端：WSL `~/.codex/skills/...`、Windows `~/.agents/skills/...`；各 55 文件。
+- Skill 双端：WSL `~/.codex/skills/...`、Windows `~/.agents/skills/...`；各 56 文件。
 - 最近提交（skill 私有仓库）：`8f5ae05 feat(skill): add expert review and writing guidance`
 - 最近提交（比赛 public）：`e2a6b07 docs(delivery): add AI tool usage report template`
 
@@ -39,6 +39,17 @@ Cursor 不自动加载；必须显式读。任务相关再读 `references/01,02,
 1. 比赛开始后，确认题号/队号/截止时间写入 `00_赛题与规则/赛事参数.md`。
 2. 建 `cursor/<scope>-<topic>` 分支；先跑 `uname -a`、`git status`、skill 自检。
 3. 按 skill 的问题链→数据→模型→结果→论文流程推进；每完成一个阶段更新本文件。
+
+## 5.1 多 Agent 消息总线（2026-11-13 新增）
+
+- 协议：`docs/collab/AGENT_BUS.md`
+- 开轮自检：`python3 tools/agent_bus/bus.py inbox --agent cursor --unread`
+- 接任务先 `claim`，做完 `done`；阻塞就 `reply` 说明。
+- MCP：`tools/agent_bus/mcp_server.py`，Codex/Cursor 配置见协议文档。
+- 自动跑一轮：`tools/agent_bus/orchestrator.py`（默认 dry-run，`--run` 才调模型；支持 Codex 与已登录的 Cursor Agent CLI）。
+- 连续接力：`tools/agent_bus/coordinator.py --run --max-turns 6`；停止文件 `docs/collab/AGENT_BUS_STOP`。
+- Cursor CLI：`~/.local/bin/cursor-agent`；需一次性 `agent login`，当前状态为未登录。
+- HUD：`tools/agent_hud/server.py` 显示 `BUS n` 未读数；HUD 只读，不会唤醒 Agent。
 
 ## 6. 数据/模型路径
 

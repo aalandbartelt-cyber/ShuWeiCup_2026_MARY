@@ -31,3 +31,11 @@
 - 正式件：默认仍由 Codex 写；Cursor 写正式件须用户明确授权并记录本文件。
 - AI 合规：Cursor 是 AI 工具，按 skill `references/18` 记录、声明、报告。
 - 影响：`AGENTS.md`、`.cursor/rules/mary-shuwei-skill.mdc`、`docs/collab/CURSOR_HANDOFF.md`、skill `references/21`。
+
+## D-007 多 Agent 消息总线与有界接力
+- 时间：2026-11-13
+- 决定：跨 Agent 任务/回复走 `docs/collab/AGENT_MESSAGES.jsonl`（`tools/agent_bus/bus.py`）；Codex/Cursor 可通过 MCP 工具 `bus_*` 访问。
+- 自动执行：`orchestrator.py` 一次跑一条；`coordinator.py` 有轮数/时间/失败上限；默认 dry-run，`--run` 才调模型。
+- Cursor：`cursor-agent` 已安装，需一次性 `agent login`；未登录时编排器拒绝执行，不标记失败。
+- 交棒：Agent 结尾写 `NEXT_AGENT: cursor`，编排器自动建 follow-up request；不直接互相 `bus_post`。
+- 边界：bus 只传任务/结论/指针；正式件所有权不变；消息文件在 public 仓库，禁止密钥/隐私/未公开赛题原文。

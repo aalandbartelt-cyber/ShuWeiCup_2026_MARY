@@ -11,7 +11,10 @@ Before making changes:
 1. Confirm the terminal is WSL: `uname -a` shows Linux and `pwd` is `/home/mary/shuwei2026`.
 2. Read `AGENTS.md`.
 3. Read `docs/collab/CURSOR_HANDOFF.md` and run `git status --short --branch`.
-4. Read the ShuWei skill:
+4. Check the agent bus before starting work:
+   `python3 tools/agent_bus/bus.py inbox --agent cursor --unread`
+   Read `docs/collab/AGENT_BUS.md` for the message protocol.
+5. Read the ShuWei skill:
    `/home/mary/.codex/skills/mary-modeling-contest-pipeline-shuwei/SKILL.md`
    Then read the task-relevant files under `references/` (at least 01, 02, 05, 15, 18, 19, 20, 21 when applicable).
 
@@ -30,6 +33,7 @@ AI compliance:
 
 Before finishing:
 
+- Post a `reply`/`handoff` for any claimed bus message and mark it `done`; if blocked, reply with the exact blocker and keep it `claimed`.
 - Run the relevant tests/audits.
 - Update `docs/collab/CURSOR_HANDOFF.md` with what changed, commands/results, next steps, blockers.
 - Do not overwrite another agent's uncommitted work.

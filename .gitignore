@@ -33,3 +33,11 @@ __pycache__/
 
 # office temp
 ~$*
+
+# agent bus runtime
+docs/collab/AGENT_BUS_STOP
+docs/collab/AGENT_MESSAGES.jsonl.lock
+docs/collab/*.lock
+
+# local R2 extraction (third-party paper pages; not redistributed)
+docs/analysis/shuwei/round2_visual/

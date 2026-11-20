@@ -9,7 +9,7 @@
 | Codex | WSL / VS Code Remote-WSL | 默认主环境：建模、代码、结果、正式论文/包、`main` |
 | Cursor | WSL | **Codex 无额度/不可用时的备份主力**：接手建模/代码/结果/图表/论文候选；写 `cursor/` 分支与 `05_论文/待审/`；不能恢复 Codex thread，用 `CURSOR_HANDOFF.md` |
 | ZCode | Windows | 副环境：数据、文档、复核、图稿候选、提交检查 |
-| dsh | Windows | 只做论文评审/文字优化，写 `reviews/` |
+| dsh | Windows | DeepSeek Harness（`C:\Users\mary3\AppData\Local\Programs\DeepSeek Harness\DeepSeek Harness.exe`）；只做论文评审/文字优化，写 `reviews/` |
 
 ## 文件
 
@@ -21,6 +21,8 @@
 | `to_zcode.md` | 只有 Codex | ZCode 只改状态行 |
 | `decisions.md` | 双方追加 | D-xxx，不删除 |
 | `reviews/` | dsh | `REV-YYYYMMDD-NN.md` |
+| `AGENT_MESSAGES.jsonl` | 各 Agent 追加 | 机器可读消息总线；协议见 `AGENT_BUS.md` |
+| `rounds/` | 编排器 | 每次自动运行的 prompt/stdout/stderr 记录 |
 
 ## 消息格式
 
@@ -34,6 +36,18 @@
 ```
 
 状态：`OPEN → ACK → DONE / BLOCKED / PAUSED`。
+
+## 机器可读总线（推荐）
+
+跨 Agent 的任务/回复优先走 `AGENT_MESSAGES.jsonl`，不要只写 markdown 信箱：
+
+```bash
+python3 tools/agent_bus/bus.py inbox --agent codex --unread
+python3 tools/agent_bus/bus.py claim MSG-... --agent codex
+python3 tools/agent_bus/bus.py done MSG-... --agent codex --note "..."
+```
+
+完整协议、MCP 配置、自动编排与安全边界见 `AGENT_BUS.md`。
 
 ## 边界
 

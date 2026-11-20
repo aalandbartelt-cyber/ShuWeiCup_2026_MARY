@@ -9,7 +9,7 @@
 | **Codex** | WSL | 默认主环境：建模、代码、结果、正式论文/包、`main` 集成 |
 | **Cursor** | WSL | **Codex 无额度/不可用时的备份主力**：接手建模/代码/结果/图表/论文候选；写 `cursor/` 分支与 `05_论文/待审/` |
 | **ZCode** | Windows | 辅助：数据、文档、复核、图稿候选、提交检查 |
-| **dsh** | Windows | 只做论文评审/文字优化，写 `docs/collab/reviews/` |
+| **dsh** | Windows | DeepSeek Harness，路径 `C:\Users\mary3\AppData\Local\Programs\DeepSeek Harness\DeepSeek Harness.exe`；只做论文评审/文字优化，写 `docs/collab/reviews/` |
 
 ## 必读 skill
 
@@ -42,5 +42,12 @@ Cursor 不会自动加载 Codex skill；必须显式读上述路径。项目规�
 
 - 跨 Agent 交接只写文件，不依赖对话上下文。
 - 每次接手/交付更新 `docs/collab/CURSOR_HANDOFF.md`（或对应 handoff）。
-- 可选本地只读面板：`tools/agent_hud/server.py` → `http://127.0.0.1:8765/`；它只做 observability，不替代 handoff。
+- 跨 Agent 消息走 `docs/collab/AGENT_MESSAGES.jsonl`（见 `docs/collab/AGENT_BUS.md`）：
+  - 开轮先 `python3 tools/agent_bus/bus.py inbox --agent <self> --unread`；
+  - 接任务先 `claim`，做完 `done`，做不完回 `reply` 说明卡点；
+  - 可用 `mcp_server.py` 把 `bus_*` 工具接进 Codex/Cursor；
+  - bus 只传任务/结论/指针，不传密钥、隐私、未公开赛题原文；正式件所有权不变。
+- 可选本地只读面板：`tools/agent_hud/server.py` → `http://127.0.0.1:8765/`；它显示 bus 未读数与 handoff，但不替代 handoff，也不会自动唤醒 Agent。
+- 需要“自动跑一轮”时用 `tools/agent_bus/orchestrator.py`（默认 dry-run，`--run` 才调模型；支持 Codex 和已登录的 Cursor Agent CLI）；连续接力用 `tools/agent_bus/coordinator.py`，有轮数/时间/失败上限。
+- 在编排器里要交给下一个 Agent 时，结尾写 `NEXT: ...` + `NEXT_AGENT: cursor`（或 codex/zcode/dsh），不要自己 `bus_post`；编排器会建 follow-up request。
 - 冲突时保留双方内容，重新编号/重跑测试，不覆盖对方未合并工作。

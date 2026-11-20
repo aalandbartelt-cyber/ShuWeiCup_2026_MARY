@@ -47,6 +47,30 @@ python3 tools/agent_hud/server.py
 
 它参考 `agent-hud-open` 的状态卡/额度色思路，但不读密钥、不调用外部 API、不替代 `CURSOR_HANDOFF.md`；额度色在 `tools/agent_hud/ai_flow.json` 手动维护。
 
+桌面浮窗（Electron，置顶/可拖动）：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File \\wsl.localhost\Ubuntu-22.04\home\mary\shuwei2026\tools\agent_hud\desktop\install_windows.ps1
+cd $env:LOCALAPPDATA\ShuWeiHUD
+npm start
+```
+
+## 多 Agent 消息总线（可选）
+
+跨 Agent 的任务/回复不再靠复制粘贴：
+
+```bash
+python3 tools/agent_bus/bus.py inbox --agent codex --unread
+python3 tools/agent_bus/bus.py post --from cursor --to codex --type request \
+  --subject "核对表 3 来源" --body "只读核对；给出文件:行号。"
+python3 tools/agent_bus/coordinator.py --run --max-turns 6
+```
+
+- 协议/MCP/安全边界：`docs/collab/AGENT_BUS.md`
+- 自动执行：`orchestrator.py`（Codex；Cursor 需一次 `agent login`）
+- 连续接力：`coordinator.py`（有界，停止文件 `docs/collab/AGENT_BUS_STOP`）
+- 消息文件：`docs/collab/AGENT_MESSAGES.jsonl`（public 仓库，禁止密钥/隐私）
+
 ## 提交
 
 ```bash
