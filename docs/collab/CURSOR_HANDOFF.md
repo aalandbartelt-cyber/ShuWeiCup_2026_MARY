@@ -2,13 +2,13 @@
 
 > 交接文件，不依赖对话上下文。Cursor 每次接手先读本文件；Codex 恢复后也先读本文件。
 
-## 1. 当前状态（2026-11-13）
+## 1. 当前状态（2026-11-20）
 
 - 仓库：`~/shuwei2026`
 - 当前本地分支：`main`（以 `git status` 实际为准）
 - 远端：`origin` = `ShuWeiCup_2026_MARY`（public）
-- 远端 `main` 最新（GitHub API）：`e2a6b07 docs(delivery): add AI tool usage report template`
-- 注意：本地 `main` 可能有一个内容相同但 hash 不同的本地提交（API 更新导致本地/远端分叉）；**不要盲目 force push**。先 `git status --short --branch` 和 `git log --oneline -5`。
+- 远端 `main` 最新（GitHub API）：`36045bd feat(tools): add agent bus and desktop AI ops HUD`
+- 本地 `main` 已对齐 `origin/main`；提交前仍先跑 `git status --short --branch` 和 `git log --oneline -5`。
 - 本地 `zcode/fig-r2-visual` 分支保留 R2 视觉分析，未合并；不要覆盖。
 - 正式论文/正式图/交付包：尚未开始；`05_论文/正式/`、`06_交付/` 仍由 Codex 默认所有。
 
@@ -22,7 +22,7 @@ Cursor 不自动加载；必须显式读。任务相关再读 `references/01,02,
 
 ## 3. 当前目标与验收
 
-- 当前不是比赛日；没有进行中的正式论文任务。
+- 比赛期：2026-11-20 09:00—11-24 09:00（北京时间）；论文提交截止 11-24 10:00。
 - 已完成的准备：官方格式/模板、AI 报告模板、专家写作/流程规则、skill 56 文件、双端同步。
 - 比赛开始后，从用户粘贴的赛题与 `00_赛题与规则/赛事参数.md` 起，按 skill 的 4 天流程执行。
 
@@ -31,8 +31,8 @@ Cursor 不自动加载；必须显式读。任务相关再读 `references/01,02,
 - 官方文件：`00_赛题与规则/2026官方更新_20261111/`
 - AI 报告模板：`06_交付/04_支撑材料/AI_Tool_Usage_Report_Template.docx`
 - Skill 双端：WSL `~/.codex/skills/...`、Windows `~/.agents/skills/...`；各 56 文件。
-- 最近提交（skill 私有仓库）：`8f5ae05 feat(skill): add expert review and writing guidance`
-- 最近提交（比赛 public）：`e2a6b07 docs(delivery): add AI tool usage report template`
+- 最近提交（skill 私有仓库）：`2c3d50c docs(submission): enforce 2026-11-17 three-slot rules`
+- 最近提交（比赛 public）：`36045bd feat(tools): add agent bus and desktop AI ops HUD`
 
 ## 5. 下一步 3 件
 
